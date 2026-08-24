@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daro — Trading Systems Architect</title>
+<meta name="description" content="Trading systems architect. De la lectura de mercados a mano al trading sistemático.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0D0B;
+    --bg-panel: #101512;
+    --bg-panel-2: #0D1210;
+    --line: #223028;
+    --ink: #DCE5DE;
+    --ink-soft: #7C8B82;
+    --ink-dim: #4E5A53;
+    --accent: #2FE18C;
+    --accent-dim: #1B8F5C;
+    --amber: #E0A54B;
+    --red: #E0645C;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  body::before{
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.05;
+    background-image:
+      repeating-linear-gradient(0deg, var(--accent) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(90deg, var(--accent) 0 1px, transparent 1px 40px);
+  }
+
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .center{ text-align: center; }
+
+  .ticker{
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-panel-2);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 9px 0;
+  }
+  .ticker-track{
+    display: inline-flex;
+    gap: 40px;
+    animation: scroll 26s linear infinite;
+    font-size: 12.5px;
+  }
+  .ticker span{ color: var(--ink-soft); }
+  .ticker .up{ color: var(--accent); }
+  .ticker .down{ color: var(--red); }
+  @keyframes scroll{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ticker-track{ animation: none; }
+  }
+
+  header{
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  header .wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .brand{
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .brand .prompt{ color: var(--accent); }
+  nav{ display: flex; gap: 26px; }
+  nav a{
+    font-size: 13px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    transition: color .15s ease;
+  }
+  nav a::before{ content: "./"; color: var(--ink-dim); }
+  nav a:hover{ color: var(--accent); }
+
+  .hero{
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow{
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin: 0 0 20px;
+  }
+  .eyebrow::before{ content: "$ "; color: var(--ink-dim); }
+  h1{
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: clamp(36px, 5.6vw, 58px);
+    line-height: 1.12;
+    margin: 0 auto 22px;
+    max-width: 15ch;
+    color: #F2F5F1;
+  }
+  .cursor{
+    display: inline-block;
+    width: 0.5ch;
+    background: var(--accent);
+    animation: blink 1s step-end infinite;
+    margin-left: 3px;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  .lede{
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    margin: 0 auto 48px;
+  }
+  .lede em{ font-style: normal; color: var(--ink); }
+
+  .signal-panel{
+    max-width: 700px;
+    margin: 0 auto;
+    border: 1px solid var(--line);
+    background: var(--bg-panel);
+    border-radius: 6px;
+    overflow: hidden;
+    text-align: left;
+  }
+  .panel-bar{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-panel-2);
+  }
+  .dot-btn{ width: 9px; height: 9px; border-radius: 50%; }
+  .panel-title{
+    margin-left: 8px;
+    font-size: 11.5px;
+    color: var(--ink-dim);
+  }
+  .panel-body{ padding: 20px 20px 16px; }
+  .panel-body svg{ width: 100%; height: auto; display: block; }
+  .signal-caption{
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-top: 12px;
+    display: flex;
+    gap: 22px;
+  }
+  .signal-caption .sw{
+    display: inline-block; width: 8px; height: 8px; margin-right: 6px; vertical-align: middle;
+  }
+
+  .path-slow{ stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 2.2s ease forwards .2s; }
+  .path-fast{ stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 2.2s ease forwards .5s; }
+  .cross-dot{ opacity: 0; animation: pop .4s ease forwards 2.2s; }
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+  @keyframes pop{ to{ opacity: 1; } }
+  @media (prefers-reduced-motion: reduce){
+    .path-slow, .path-fast{ stroke-dashoffset: 0; animation: none; }
+    .cross-dot{ opacity: 1; animation: none; }
+  }
+
+  .about{
+    padding: 76px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-label{
+    font-size: 12.5px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+  }
+  .section-label::before{ content: "// "; color: var(--ink-dim); }
+  .about-body{
+    max-width: 62ch;
+    margin: 0 auto;
+  }
+  .about-body p{
+    font-size: 15.5px;
+    color: var(--ink);
+    margin: 0 0 18px;
+  }
+  .about-body p:last-child{ margin-bottom: 0; color: var(--ink-soft); }
+
+  .systems{
+    padding: 76px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .systems .section-label{ text-align: center; }
+  .systems-sub{
+    text-align: center;
+    color: var(--ink-dim);
+    font-size: 12.5px;
+    margin: -14px 0 40px;
+  }
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .card{
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color .15s ease;
+  }
+  .card:hover{ border-color: var(--accent-dim); }
+  .card .panel-bar{ padding: 8px 12px; }
+  .card-body{ padding: 20px; }
+  .card-tag{
+    font-size: 10.5px;
+    color: var(--accent);
+    background: rgba(47,225,140,0.08);
+    border: 1px solid var(--accent-dim);
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.03em;
+  }
+  .card-status{ font-size: 11px; color: var(--ink-dim); margin-left: auto; }
+  .card h3{
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: 19px;
+    margin: 14px 0 10px;
+    color: #F2F5F1;
+  }
+  .card p{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .contact{ padding: 80px 0 90px; }
+  .contact h2{
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: 30px;
+    margin: 0 auto 16px;
+    max-width: 20ch;
+    color: #F2F5F1;
+  }
+  .contact p{
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    max-width: 48ch;
+    margin: 0 auto 36px;
+  }
+  .links{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .links a{
+    font-size: 13px;
+    text-decoration: none;
+    padding: 11px 18px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink);
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
+  }
+  .links a:hover{
+    border-color: var(--accent);
+    background: rgba(47,225,140,0.06);
+    color: var(--accent);
+  }
+  .links svg{ width: 14px; height: 14px; }
+  .label{ display: inline-block; min-width: 1ch; }
+  .label.typing::after{
+    content: "";
+    display: inline-block;
+    width: 0.5ch;
+    margin-left: 1px;
+    background: var(--accent);
+    animation: blink 0.8s step-end infinite;
+    height: 1em;
+    vertical-align: -0.15em;
+  }
+
+  footer{ border-top: 1px solid var(--line); padding: 22px 0; }
+  footer .wrap{
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    font-size: 11.5px;
+    color: var(--ink-dim);
+  }
+
+  @media (max-width: 680px){
+    .grid{ grid-template-columns: 1fr; }
+    header .wrap{ gap: 18px; }
+    nav{ gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span>BTC/USDT <span class="up">▲ 2.14%</span></span>
+    <span>ETH/USDT <span class="down">▼ 0.87%</span></span>
+    <span>SOL/USDT <span class="up">▲ 4.02%</span></span>
+    <span>FUNDING 8H <span class="up">+0.011%</span></span>
+    <span>REGIME <span style="color:var(--amber)">TRENDING</span></span>
+    <span>BTC/USDT <span class="up">▲ 2.14%</span></span>
+    <span>ETH/USDT <span class="down">▼ 0.87%</span></span>
+    <span>SOL/USDT <span class="up">▲ 4.02%</span></span>
+    <span>FUNDING 8H <span class="up">+0.011%</span></span>
+    <span>REGIME <span style="color:var(--amber)">TRENDING</span></span>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="prompt">~/</span>daro.systems</div>
+    <nav>
+      <a href="#about">about</a>
+      <a href="#systems">systems</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap center">
+    <p class="eyebrow">whoami — trading systems architect</p>
+    <h1>De leer el mercado a mano<br>a enseñarle a leerlo<span class="cursor">&nbsp;</span></h1>
+    <p class="lede">
+      Diez años operando renta fija y variable argentina, a mano, en gráficos diarios.
+      Hoy convierto <em>esa lectura</em> en sistemas: estrategias que se validan contra
+      datos históricos antes de arriesgar un peso.
+    </p>
+
+    <div class="signal-panel">
+      <div class="panel-bar">
+        <span class="dot-btn" style="background:var(--red)"></span>
+        <span class="dot-btn" style="background:var(--amber)"></span>
+        <span class="dot-btn" style="background:var(--accent)"></span>
+        <span class="panel-title">acmm_strategy.py — regime: 4H/1D</span>
+      </div>
+      <div class="panel-body">
+        <svg viewBox="0 0 860 160" preserveAspectRatio="none">
+          <line x1="0" y1="140" x2="860" y2="140" stroke="var(--line)" stroke-width="1"/>
+          <path class="path-slow" d="M0,110 C120,105 180,90 260,95 C340,100 380,120 460,115 C540,110 580,75 660,70 C740,65 800,72 860,60"
+                fill="none" stroke="var(--ink-dim)" stroke-width="2"/>
+          <path class="path-fast" d="M0,125 C100,122 160,118 230,112 C310,105 360,100 430,88 C500,76 560,68 630,66 C700,64 780,58 860,45"
+                fill="none" stroke="var(--accent)" stroke-width="2.25"/>
+          <circle class="cross-dot" cx="470" cy="97" r="5" fill="var(--accent)"/>
+        </svg>
+        <div class="signal-caption">
+          <span><span class="sw" style="background:var(--ink-dim)"></span>EMA 200D</span>
+          <span><span class="sw" style="background:var(--accent)"></span>EMA 20/50 4H</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap center">
+    <p class="section-label">about</p>
+    <div class="about-body">
+      <p>
+        Empecé operando a mano — bonos y acciones argentinas, gráficos diarios,
+        convicción paciente. Diez años leyendo contexto macro antes de mover una posición.
+      </p>
+      <p>
+        Ese mismo criterio es el que estoy llevando a sistemas automatizados: arquitecturas
+        que detectan régimen de mercado, asignan capital entre estrategias, y —sobre todo—
+        se prueban contra datos históricos antes de arriesgar capital real.
+      </p>
+      <p>
+        Nada se despliega sin pasar primero por backtest. Esa es la regla.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="systems" id="systems">
+  <div class="wrap">
+    <p class="section-label center">systems</p>
+    <p class="systems-sub">parquet en vivo — el estado real de cada estrategia</p>
+    <div class="grid">
+      <div class="card">
+        <div class="panel-bar">
+          <span class="dot-btn" style="background:var(--red)"></span>
+          <span class="dot-btn" style="background:var(--amber)"></span>
+          <span class="dot-btn" style="background:var(--accent)"></span>
+          <span class="card-tag">trend</span>
+          <span class="card-status">paper</span>
+        </div>
+        <div class="card-body">
+          <h3>Regime-Aware Allocation Engine</h3>
+          <p>Detección de régimen de mercado y selección dinámica entre estrategias de tendencia, reversión y breakout.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="panel-bar">
+          <span class="dot-btn" style="background:var(--red)"></span>
+          <span class="dot-btn" style="background:var(--amber)"></span>
+          <span class="dot-btn" style="background:var(--accent)"></span>
+          <span class="card-tag">yield</span>
+          <span class="card-status">build</span>
+        </div>
+        <div class="card-body">
+          <h3>Funding Rate Arbitrage</h3>
+          <p>Estrategia delta-neutral que captura funding rate en perpetuos, sin apuesta direccional.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="panel-bar">
+          <span class="dot-btn" style="background:var(--red)"></span>
+          <span class="dot-btn" style="background:var(--amber)"></span>
+          <span class="dot-btn" style="background:var(--accent)"></span>
+          <span class="card-tag">stat arb</span>
+          <span class="card-status">research</span>
+        </div>
+        <div class="card-body">
+          <h3>Mean-Reversion Z-Score</h3>
+          <p>Reversión estadística de retornos residuales de altcoins contra BTC.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="panel-bar">
+          <span class="dot-btn" style="background:var(--red)"></span>
+          <span class="dot-btn" style="background:var(--amber)"></span>
+          <span class="dot-btn" style="background:var(--accent)"></span>
+          <span class="card-tag">infra</span>
+          <span class="card-status">live</span>
+        </div>
+        <div class="card-body">
+          <h3>Backtesting Engine</h3>
+          <p>Motor propio con validación walk-forward y arrays de numpy: backtests de segundos, no minutos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap center">
+    <h2>Hablemos de sistemas, mercados o código.</h2>
+    <p>Abierto a charlar sobre trading algorítmico, arquitectura de sistemas o intercambiar ideas de research.</p>
+    <div class="links">
+      <a href="https://github.com/Terereboy" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.29 9.42 7.86 10.95.57.1.78-.25.78-.55 0-.27-.01-1-.02-1.96-3.2.7-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.4-5.28 5.69.42.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .3.2.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+        <span class="label" data-full="github">github</span>
+      </a>
+      <a href="https://www.linkedin.com/in/dariolopezgamez/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0Z"/></svg>
+        <span class="label" data-full="linkedin">linkedin</span>
+      </a>
+      <a href="mailto:dario.lopez.gamez@gmail.com">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.2-.5 7.3 6.1a1 1 0 0 0 1 0L19.8 5H4.2Zm15.8 1.6-7.02 5.87a2.5 2.5 0 0 1-3.16 0L4.8 6.6V18.5c0 .28.22.5.5.5h15a.5.5 0 0 0 .5-.5V6.6Z"/></svg>
+        <span class="label" data-full="dario.lopez.gamez@gmail.com">email</span>
+      </a>
+      <a href="https://x.com/T3r3r3Quant" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2h3.3l-7.2 8.2L23.5 22h-6.7l-5.2-6.8L5.6 22H2.3l7.7-8.8L1.5 2h6.9l4.7 6.2L18.9 2Zm-1.2 18h1.8L7.4 4H5.5l12.2 16Z"/></svg>
+        <span class="label" data-full="@T3r3r3Quant">x / twitter</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>daro.systems</span>
+    <span>© 2026</span>
+    <span>built with intent, not frameworks</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var labels = Array.prototype.slice.call(document.querySelectorAll('.links .label'));
+  if(!labels.length) return;
+
+  if(reduce){
+    labels.forEach(function(el){ el.textContent = el.dataset.full; });
+    return;
+  }
+
+  labels.forEach(function(el){ el.textContent = ''; });
+
+  function typeOne(el, cb){
+    var text = el.dataset.full;
+    var i = 0;
+    el.classList.add('typing');
+    var iv = setInterval(function(){
+      el.textContent = text.slice(0, i + 1);
+      i++;
+      if(i >= text.length){
+        clearInterval(iv);
+        el.classList.remove('typing');
+        setTimeout(cb, 160);
+      }
+    }, 38);
+  }
+
+  function typeSequential(index){
+    if(index >= labels.length) return;
+    typeOne(labels[index], function(){ typeSequential(index + 1); });
+  }
+
+  var container = document.querySelector('.links');
+  var started = false;
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting && !started){
+        started = true;
+        typeSequential(0);
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.4 });
+  observer.observe(container);
+})();
+</script>
+</body>
+</html>
