@@ -194,10 +194,6 @@
     .cross-dot{ opacity: 1; animation: none; }
   }
 
-  .about{
-    padding: 76px 0;
-    border-bottom: 1px solid var(--line);
-  }
   .section-label{
     font-size: 12.5px;
     color: var(--accent);
@@ -205,25 +201,11 @@
     margin-bottom: 28px;
   }
   .section-label::before{ content: "// "; color: var(--ink-dim); }
-  .about-body{
-    max-width: 62ch;
-    margin: 0 auto;
-  }
-  .about-body p{
-    font-size: 15.5px;
-    color: var(--ink);
-    margin: 0 0 18px;
-  }
-  .about-body p:last-child{ margin-bottom: 0; color: var(--ink-soft); }
 
-  /* ---------- dossier (perfil + foto) ---------- */
-  .dossier{
-    padding: 76px 0;
-    border-bottom: 1px solid var(--line);
-  }
+  /* ---------- dossier (perfil + foto), ahora vive dentro del hero ---------- */
   .dossier-panel{
-    max-width: 760px;
-    margin: 0 auto;
+    max-width: 700px;
+    margin: 0 auto 32px;
     border: 1px solid var(--line);
     background: var(--bg-panel);
     border-radius: 6px;
@@ -454,7 +436,7 @@
 
 <section class="hero">
   <div class="wrap center">
-    <p class="eyebrow">whoami — trading systems architect</p>
+    <p class="eyebrow">who am I — trading systems architect</p>
     <h1>De leer el mercado a mano<br>a enseñarle a leerlo<span class="cursor">&nbsp;</span></h1>
     <p class="lede">
       Diez años operando renta fija y variable argentina, a mano, en gráficos diarios.
@@ -462,55 +444,7 @@
       datos históricos antes de arriesgar un peso.
     </p>
 
-    <div class="signal-panel">
-      <div class="panel-bar">
-        <span class="dot-btn" style="background:var(--red)"></span>
-        <span class="dot-btn" style="background:var(--amber)"></span>
-        <span class="dot-btn" style="background:var(--accent)"></span>
-        <span class="panel-title">acmm_strategy.py — regime: 4H/1D</span>
-      </div>
-      <div class="panel-body">
-        <svg viewBox="0 0 860 160" preserveAspectRatio="none">
-          <line x1="0" y1="140" x2="860" y2="140" stroke="var(--line)" stroke-width="1"/>
-          <path class="path-slow" d="M0,110 C120,105 180,90 260,95 C340,100 380,120 460,115 C540,110 580,75 660,70 C740,65 800,72 860,60"
-                fill="none" stroke="var(--ink-dim)" stroke-width="2"/>
-          <path class="path-fast" d="M0,125 C100,122 160,118 230,112 C310,105 360,100 430,88 C500,76 560,68 630,66 C700,64 780,58 860,45"
-                fill="none" stroke="var(--accent)" stroke-width="2.25"/>
-          <circle class="cross-dot" cx="470" cy="97" r="5" fill="var(--accent)"/>
-        </svg>
-        <div class="signal-caption">
-          <span><span class="sw" style="background:var(--ink-dim)"></span>EMA 200D</span>
-          <span><span class="sw" style="background:var(--accent)"></span>EMA 20/50 4H</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="about" id="about">
-  <div class="wrap center">
-    <p class="section-label">about</p>
-    <div class="about-body">
-      <p>
-        Empecé operando a mano — bonos y acciones argentinas, gráficos diarios,
-        convicción paciente. Diez años leyendo contexto macro antes de mover una posición.
-      </p>
-      <p>
-        Ese mismo criterio es el que estoy llevando a sistemas automatizados: arquitecturas
-        que detectan régimen de mercado, asignan capital entre estrategias, y —sobre todo—
-        se prueban contra datos históricos antes de arriesgar capital real.
-      </p>
-      <p>
-        Nada se despliega sin pasar primero por backtest. Esa es la regla.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="dossier" id="dossier">
-  <div class="wrap">
-    <p class="section-label center">dossier</p>
-    <div class="dossier-panel">
+    <div class="dossier-panel" id="about">
       <div class="panel-bar">
         <span class="dot-btn" style="background:var(--red)"></span>
         <span class="dot-btn" style="background:var(--amber)"></span>
@@ -538,6 +472,29 @@
             <p class="block-label">// bolsa &amp; automatización con IA</p>
             <p>10+ años operando manualmente en mercados argentinos. Hoy construye sistemas propios de trading algorítmico — backtesting, detección de régimen de mercado, automatización end-to-end — y lidera adopción de IA en Finanzas, con casos de uso que redujeron 80-90% el esfuerzo manual en procesos críticos.</p>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal-panel">
+      <div class="panel-bar">
+        <span class="dot-btn" style="background:var(--red)"></span>
+        <span class="dot-btn" style="background:var(--amber)"></span>
+        <span class="dot-btn" style="background:var(--accent)"></span>
+        <span class="panel-title">acmm_strategy.py — regime: 4H/1D</span>
+      </div>
+      <div class="panel-body">
+        <svg viewBox="0 0 860 160" preserveAspectRatio="none">
+          <line x1="0" y1="140" x2="860" y2="140" stroke="var(--line)" stroke-width="1"/>
+          <path class="path-slow" d="M0,110 C120,105 180,90 260,95 C340,100 380,120 460,115 C540,110 580,75 660,70 C740,65 800,72 860,60"
+                fill="none" stroke="var(--ink-dim)" stroke-width="2"/>
+          <path class="path-fast" d="M0,125 C100,122 160,118 230,112 C310,105 360,100 430,88 C500,76 560,68 630,66 C700,64 780,58 860,45"
+                fill="none" stroke="var(--accent)" stroke-width="2.25"/>
+          <circle class="cross-dot" cx="470" cy="97" r="5" fill="var(--accent)"/>
+        </svg>
+        <div class="signal-caption">
+          <span><span class="sw" style="background:var(--ink-dim)"></span>EMA 200D</span>
+          <span><span class="sw" style="background:var(--accent)"></span>EMA 20/50 4H</span>
         </div>
       </div>
     </div>
