@@ -216,6 +216,98 @@
   }
   .about-body p:last-child{ margin-bottom: 0; color: var(--ink-soft); }
 
+  /* ---------- dossier (perfil + foto) ---------- */
+  .dossier{
+    padding: 76px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .dossier-panel{
+    max-width: 760px;
+    margin: 0 auto;
+    border: 1px solid var(--line);
+    background: var(--bg-panel);
+    border-radius: 6px;
+    overflow: hidden;
+    text-align: left;
+  }
+  .dossier-body{
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 28px;
+    padding: 28px;
+  }
+  .profile-photo-wrap{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--bg-panel-2);
+  }
+  .profile-photo-wrap img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(1) contrast(1.15) brightness(0.92);
+  }
+  .profile-photo-wrap::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    mix-blend-mode: color;
+    opacity: 0.4;
+  }
+  .profile-name{
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: #F2F5F1;
+    margin: 12px 0 0;
+    text-align: center;
+  }
+  .profile-role{
+    font-size: 10.5px;
+    color: var(--ink-dim);
+    text-align: center;
+    margin: 4px 0 0;
+  }
+  .dossier-blocks{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .dossier-block{
+    padding-left: 14px;
+    border-left: 2px solid var(--line);
+  }
+  .dossier-block.highlight{
+    border-left: 2px solid var(--accent);
+    background: rgba(47,225,140,0.05);
+    padding: 12px 14px;
+    border-radius: 0 4px 4px 0;
+  }
+  .block-label{
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin: 0 0 8px;
+  }
+  .dossier-block p{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.65;
+  }
+  .dossier-block.highlight p{ color: var(--ink); }
+
+  @media (max-width: 560px){
+    .dossier-body{ grid-template-columns: 1fr; }
+    .profile-photo-wrap{ max-width: 160px; margin: 0 auto; }
+  }
+
   .systems{
     padding: 76px 0;
     border-bottom: 1px solid var(--line);
@@ -411,6 +503,43 @@
       <p>
         Nada se despliega sin pasar primero por backtest. Esa es la regla.
       </p>
+    </div>
+  </div>
+</section>
+
+<section class="dossier" id="dossier">
+  <div class="wrap">
+    <p class="section-label center">dossier</p>
+    <div class="dossier-panel">
+      <div class="panel-bar">
+        <span class="dot-btn" style="background:var(--red)"></span>
+        <span class="dot-btn" style="background:var(--amber)"></span>
+        <span class="dot-btn" style="background:var(--accent)"></span>
+        <span class="panel-title">profile.json — verified</span>
+      </div>
+      <div class="dossier-body">
+        <div>
+          <div class="profile-photo-wrap">
+            <img src="daro.jpg" alt="Dario Lopez">
+          </div>
+          <p class="profile-name">Dario Lopez</p>
+          <p class="profile-role">real / not fictional</p>
+        </div>
+        <div class="dossier-blocks">
+          <div class="dossier-block">
+            <p class="block-label">// resumen</p>
+            <p>18+ años en Control de Gestión y FP&amp;A, formado en compañías multinacionales líderes de su industria. Experiencia en costos, cash flow, créditos y cobranzas, con equipos y proyectos de alcance regional e internacional.</p>
+          </div>
+          <div class="dossier-block">
+            <p class="block-label">// rol actual</p>
+            <p>Client Financial Management en Accenture. Coordina un equipo regional (España, Portugal, Italia): forecast mensual y anual, cierre financiero, evaluación de proyectos y gestión de cartera de créditos y cobranzas.</p>
+          </div>
+          <div class="dossier-block highlight">
+            <p class="block-label">// bolsa &amp; automatización con IA</p>
+            <p>10+ años operando manualmente en mercados argentinos. Hoy construye sistemas propios de trading algorítmico — backtesting, detección de régimen de mercado, automatización end-to-end — y lidera adopción de IA en Finanzas, con casos de uso que redujeron 80-90% el esfuerzo manual en procesos críticos.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
