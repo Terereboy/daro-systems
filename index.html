@@ -285,6 +285,70 @@
   }
   .dossier-block.highlight p{ color: var(--ink); }
 
+  /* ---------- tag cloud (segmentos) ---------- */
+  .tagcloud{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .tag{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 13px;
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .tag::before{ content: "#"; color: var(--ink-dim); }
+  .tag:hover{
+    border-color: var(--accent-dim);
+    color: var(--ink);
+  }
+  .tag.active{
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(47,225,140,0.07);
+  }
+  .tag-output{
+    margin-top: 14px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--bg-panel-2);
+    padding: 14px 16px;
+    min-height: 76px;
+  }
+  .tag-output-placeholder{
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    margin: 0;
+  }
+  .tag-output-title{
+    font-size: 12.5px;
+    color: var(--accent);
+    margin: 0 0 8px;
+  }
+  .tag-output-title::before{ content: "> "; color: var(--ink-dim); }
+  .tag-entry{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12.5px;
+    color: var(--ink);
+    padding: 3px 0;
+    border-top: 1px solid var(--line);
+  }
+  .tag-entry:first-of-type{ border-top: none; }
+  .tag-entry .period{ color: var(--ink-soft); white-space: nowrap; }
+  .tag-note{
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin: 8px 0 0;
+  }
+
   @media (max-width: 560px){
     .dossier-body{ grid-template-columns: 1fr; }
     .profile-photo-wrap{ max-width: 160px; margin: 0 auto; }
@@ -464,9 +528,19 @@
             <p class="block-label">// resumen</p>
             <p>18+ años en Control de Gestión y FP&amp;A, formado en compañías multinacionales líderes de su industria. Experiencia en costos, cash flow, créditos y cobranzas, con equipos y proyectos de alcance regional e internacional.</p>
           </div>
-          <div class="dossier-block">
-            <p class="block-label">// rol actual</p>
-            <p>Client Financial Management en Accenture. Coordina un equipo regional (España, Portugal, Italia): forecast mensual y anual, cierre financiero, evaluación de proyectos y gestión de cartera de créditos y cobranzas.</p>
+          <div class="dossier-block" id="segments">
+            <p class="block-label">// segmentos — pasá el mouse o tocá</p>
+            <div class="tagcloud" id="tagCloud">
+              <button class="tag" type="button" data-key="cg">control_gestión_fp&amp;a</button>
+              <button class="tag" type="button" data-key="costos">costos</button>
+              <button class="tag" type="button" data-key="cobranzas">créditos_cobranzas</button>
+              <button class="tag" type="button" data-key="cashflow">cash_flow</button>
+              <button class="tag" type="button" data-key="ia">ia_automatización</button>
+              <button class="tag" type="button" data-key="lead">liderazgo_infosec</button>
+            </div>
+            <div class="tag-output" id="tagOutput">
+              <p class="tag-output-placeholder">$ pasá el mouse o tocá un segmento para ver empresa y período</p>
+            </div>
           </div>
           <div class="dossier-block highlight">
             <p class="block-label">// bolsa &amp; automatización con IA</p>
@@ -594,6 +668,127 @@
     <span>built with intent, not frameworks</span>
   </div>
 </footer>
+
+<script>
+(function(){
+  var data = {
+    cg: {
+      title: "Control de Gestión & FP&A",
+      entries: [
+        { company: "Accenture", period: "2021 — presente" },
+        { company: "Alcatel Mobile", period: "2014 — 2018" },
+        { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+      ]
+    },
+    costos: {
+      title: "Costos",
+      entries: [
+        { company: "Cervecería y Maltería Quilmes", period: "2008 — 2012" },
+        { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+      ]
+    },
+    cobranzas: {
+      title: "Créditos y Cobranzas",
+      entries: [
+        { company: "Accenture", period: "2021 — presente" },
+        { company: "Radio Victoria Fueguina", period: "2018 — 2021" }
+      ]
+    },
+    cashflow: {
+      title: "Cash Flow",
+      entries: [
+        { company: "Radio Victoria Fueguina", period: "2018 — 2021" },
+        { company: "Alcatel Mobile", period: "2014 — 2018" },
+        { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+      ]
+    },
+    ia: {
+      title: "IA & Automatización",
+      entries: [
+        { company: "Accenture", period: "2021 — presente" }
+      ],
+      note: "Copilot Aviator, agente de IA para Créditos y Cobranzas (−80/90% esfuerzo manual)"
+    },
+    lead: {
+      title: "Liderazgo & Information Security",
+      entries: [
+        { company: "Accenture", period: "2021 — presente" }
+      ],
+      note: "Lead global de Information Security — 150 colaboradores, 4 analistas coordinados"
+    }
+  };
+
+  var cloud = document.getElementById('tagCloud');
+  var output = document.getElementById('tagOutput');
+  if(!cloud || !output) return;
+
+  var tags = Array.prototype.slice.call(cloud.querySelectorAll('.tag'));
+  var pinnedKey = null;
+  var isTouch = window.matchMedia('(hover: none)').matches;
+
+  function render(key){
+    var item = data[key];
+    if(!item){
+      output.innerHTML = '<p class="tag-output-placeholder">$ pasá el mouse o tocá un segmento para ver empresa y período</p>';
+      return;
+    }
+    var html = '<p class="tag-output-title">' + item.title + '</p>';
+    item.entries.forEach(function(e){
+      html += '<div class="tag-entry"><span>' + e.company + '</span><span class="period">' + e.period + '</span></div>';
+    });
+    if(item.note){
+      html += '<p class="tag-note">' + item.note + '</p>';
+    }
+    output.innerHTML = html;
+  }
+
+  function setActive(key){
+    tags.forEach(function(t){
+      t.classList.toggle('active', t.dataset.key === key);
+    });
+  }
+
+  tags.forEach(function(tag){
+    var key = tag.dataset.key;
+
+    if(!isTouch){
+      tag.addEventListener('mouseenter', function(){
+        render(key);
+        setActive(key);
+      });
+      tag.addEventListener('mouseleave', function(){
+        if(pinnedKey){
+          render(pinnedKey);
+          setActive(pinnedKey);
+        } else {
+          render(null);
+          setActive(null);
+        }
+      });
+    }
+
+    tag.addEventListener('click', function(){
+      if(pinnedKey === key){
+        pinnedKey = null;
+        render(null);
+        setActive(null);
+      } else {
+        pinnedKey = key;
+        render(key);
+        setActive(key);
+      }
+    });
+  });
+
+  document.addEventListener('click', function(e){
+    if(pinnedKey && !cloud.contains(e.target) && !output.contains(e.target)){
+      pinnedKey = null;
+      render(null);
+      setActive(null);
+    }
+  });
+})();
+</script>
 
 <script>
 (function(){
