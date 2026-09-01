@@ -87,6 +87,10 @@
   header{
     padding: 22px 0;
     border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 20;
   }
   header .wrap{
     display: flex;
@@ -127,6 +131,20 @@
     border-color: var(--accent);
     color: var(--accent);
   }
+  .cv-btn{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 6px 12px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: opacity .15s ease;
+  }
+  .cv-btn:hover{ opacity: 0.85; }
 
   .hero{
     padding: 100px 0 80px;
@@ -218,6 +236,42 @@
     margin-bottom: 28px;
   }
   .section-label::before{ content: "// "; color: var(--ink-dim); }
+
+  /* ---------- impact (métricas) ---------- */
+  .impact{
+    padding: 64px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .stats-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .stat{
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px 12px;
+    background: var(--bg-panel);
+  }
+  .stat-value{
+    font-family: 'Newsreader', serif;
+    font-weight: 600;
+    font-size: 30px;
+    color: var(--accent);
+    margin: 0 0 8px;
+  }
+  .stat-label{
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.4;
+  }
+  @media (max-width: 600px){
+    .stats-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
 
   /* ---------- dossier (perfil + foto), ahora vive dentro del hero ---------- */
   .dossier-panel{
@@ -509,10 +563,12 @@
     <div class="brand"><span class="prompt">~/</span>daro.systems</div>
     <nav>
       <a href="#about" data-i18n="nav_about">about</a>
+      <a href="#impact" data-i18n="nav_impact">impact</a>
       <a href="#systems" data-i18n="nav_systems">systems</a>
       <a href="#contact" data-i18n="nav_contact">contact</a>
     </nav>
     <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">EN</button>
+    <a class="cv-btn" href="cv.pdf" download data-i18n="cv_button">Descargar CV</a>
   </div>
 </header>
 
@@ -592,6 +648,30 @@
   </div>
 </section>
 
+<section class="impact" id="impact">
+  <div class="wrap">
+    <p class="section-label center">impact</p>
+    <div class="stats-grid">
+      <div class="stat">
+        <p class="stat-value">18+</p>
+        <p class="stat-label" data-i18n="stat_years">años en Finanzas &amp; Control de Gestión</p>
+      </div>
+      <div class="stat">
+        <p class="stat-value">80–90%</p>
+        <p class="stat-label" data-i18n="stat_ai">reducción de esfuerzo manual (IA)</p>
+      </div>
+      <div class="stat">
+        <p class="stat-value">150</p>
+        <p class="stat-label" data-i18n="stat_people">colaboradores en programas globales</p>
+      </div>
+      <div class="stat">
+        <p class="stat-value">4</p>
+        <p class="stat-label" data-i18n="stat_team">analistas liderados (IBERIA)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="systems" id="systems">
   <div class="wrap">
     <p class="section-label center">systems</p>
@@ -658,6 +738,10 @@
     <h2 data-i18n="contact_h2">Hablemos de Management, mercados o Infosec.</h2>
     <p data-i18n="contact_p">Abierto a charlar sobre trading algorítmico, automatización de procesos, planning o intercambiar ideas de hacking.</p>
     <div class="links">
+      <a href="cv.pdf" download>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Zm0 1.5L18.5 8H15a1 1 0 0 1-1-1V3.5ZM8 13h8v1.5H8V13Zm0 3h8v1.5H8V16Zm0-6h5v1.5H8V10Z"/></svg>
+        <span class="label" data-full="cv_dario_lopez.pdf">cv</span>
+      </a>
       <a href="https://github.com/Terereboy" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.29 9.42 7.86 10.95.57.1.78-.25.78-.55 0-.27-.01-1-.02-1.96-3.2.7-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.4-5.28 5.69.42.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .3.2.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
         <span class="label" data-full="github">github</span>
@@ -870,8 +954,14 @@
   var translations = {
     es: {
       nav_about: "about",
+      nav_impact: "impact",
       nav_systems: "systems",
       nav_contact: "contact",
+      cv_button: "Descargar CV",
+      stat_years: "años en Finanzas & Control de Gestión",
+      stat_ai: "reducción de esfuerzo manual (IA)",
+      stat_people: "colaboradores en programas globales",
+      stat_team: "analistas liderados (IBERIA)",
       lede: "Profesional Senior de Finanzas que usa IA y automatización para mejorar procesos financieros y la toma de decisiones",
       label_resumen: "// resumen",
       text_resumen: "18+ años en Control de Gestión y FP&A, formado en compañías multinacionales líderes de su industria. Experiencia en costos, cash flow, créditos y cobranzas, con equipos y proyectos de alcance regional e internacional.",
@@ -895,8 +985,14 @@
     },
     en: {
       nav_about: "about",
+      nav_impact: "impact",
       nav_systems: "systems",
       nav_contact: "contact",
+      cv_button: "Download CV",
+      stat_years: "years in Finance & Management Control",
+      stat_ai: "manual effort reduction (AI)",
+      stat_people: "collaborators across global programs",
+      stat_team: "analysts led (IBERIA)",
       lede: "Senior Finance professional who uses AI and automation to improve financial processes and decision-making",
       label_resumen: "// summary",
       text_resumen: "18+ years in Management Control and FP&A, built at leading multinational companies. Experience across cost accounting, cash flow, credit and collections, leading teams and projects with regional and international scope.",
