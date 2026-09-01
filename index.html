@@ -111,6 +111,23 @@
   nav a::before{ content: "./"; color: var(--ink-dim); }
   nav a:hover{ color: var(--accent); }
 
+  .lang-toggle{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .lang-toggle:hover{
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
   .hero{
     padding: 100px 0 80px;
     border-bottom: 1px solid var(--line);
@@ -491,10 +508,11 @@
   <div class="wrap">
     <div class="brand"><span class="prompt">~/</span>daro.systems</div>
     <nav>
-      <a href="#about">about</a>
-      <a href="#systems">systems</a>
-      <a href="#contact">contact</a>
+      <a href="#about" data-i18n="nav_about">about</a>
+      <a href="#systems" data-i18n="nav_systems">systems</a>
+      <a href="#contact" data-i18n="nav_contact">contact</a>
     </nav>
+    <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">EN</button>
   </div>
 </header>
 
@@ -503,8 +521,8 @@
     <p class="eyebrow">Dario López</p>
     <h1>FP&amp;A x Controlling<br>x AI x Automation<span class="cursor">&nbsp;</span></h1>
     <p class="lede">
-      --&gt; Senior Finance professional who uses AI and automation to improve
-      financial processes and decision-making &lt;--
+      --&gt; <span data-i18n="lede">Senior Finance professional who uses AI and automation to improve
+      financial processes and decision-making</span> &lt;--
     </p>
 
     <div class="dossier-panel" id="about">
@@ -524,26 +542,26 @@
         </div>
         <div class="dossier-blocks">
           <div class="dossier-block">
-            <p class="block-label">// resumen</p>
-            <p>18+ años en Control de Gestión y FP&amp;A, formado en compañías multinacionales líderes de su industria. Experiencia en costos, cash flow, créditos y cobranzas, con equipos y proyectos de alcance regional e internacional.</p>
+            <p class="block-label" data-i18n="label_resumen">// resumen</p>
+            <p data-i18n="text_resumen">18+ años en Control de Gestión y FP&amp;A, formado en compañías multinacionales líderes de su industria. Experiencia en costos, cash flow, créditos y cobranzas, con equipos y proyectos de alcance regional e internacional.</p>
           </div>
           <div class="dossier-block" id="segments">
-            <p class="block-label">// segmentos — pasá el mouse o tocá</p>
+            <p class="block-label" data-i18n="label_segments">// segmentos — pasá el mouse o tocá</p>
             <div class="tagcloud" id="tagCloud">
-              <button class="tag" type="button" data-key="cg">control_gestión_fp&amp;a</button>
-              <button class="tag" type="button" data-key="costos">costos</button>
-              <button class="tag" type="button" data-key="cobranzas">créditos_cobranzas</button>
-              <button class="tag" type="button" data-key="cashflow">cash_flow</button>
-              <button class="tag" type="button" data-key="ia">ia_automatización</button>
-              <button class="tag" type="button" data-key="lead">liderazgo_infosec</button>
+              <button class="tag" type="button" data-key="cg"><span data-i18n="tag_cg">control_gestión_fp&amp;a</span></button>
+              <button class="tag" type="button" data-key="costos"><span data-i18n="tag_costos">costos</span></button>
+              <button class="tag" type="button" data-key="cobranzas"><span data-i18n="tag_cobranzas">créditos_cobranzas</span></button>
+              <button class="tag" type="button" data-key="cashflow"><span data-i18n="tag_cashflow">cash_flow</span></button>
+              <button class="tag" type="button" data-key="ia"><span data-i18n="tag_ia">ia_automatización</span></button>
+              <button class="tag" type="button" data-key="lead"><span data-i18n="tag_lead">liderazgo_infosec</span></button>
             </div>
             <div class="tag-output" id="tagOutput">
-              <p class="tag-output-placeholder">$ pasá el mouse o tocá un segmento para ver empresa y período</p>
+              <p class="tag-output-placeholder" data-i18n="tag_placeholder">$ pasá el mouse o tocá un segmento para ver empresa y período</p>
             </div>
           </div>
           <div class="dossier-block highlight">
-            <p class="block-label">// bolsa &amp; automatización con IA</p>
-            <p>10+ años operando manualmente en mercados argentinos. Hoy construye sistemas propios de trading algorítmico — backtesting, detección de régimen de mercado, automatización end-to-end — y lidera adopción de IA en Finanzas, con casos de uso que redujeron 80-90% el esfuerzo manual en procesos críticos.</p>
+            <p class="block-label" data-i18n="label_highlight">// bolsa &amp; automatización con IA</p>
+            <p data-i18n="text_highlight">10+ años operando manualmente en mercados argentinos. Hoy construye sistemas propios de trading algorítmico — backtesting, detección de régimen de mercado, automatización end-to-end — y lidera adopción de IA en Finanzas, con casos de uso que redujeron 80-90% el esfuerzo manual en procesos críticos.</p>
           </div>
         </div>
       </div>
@@ -577,7 +595,7 @@
 <section class="systems" id="systems">
   <div class="wrap">
     <p class="section-label center">systems</p>
-    <p class="systems-sub">portfolio en vivo — estado actual de cada proyecto desarrollado</p>
+    <p class="systems-sub" data-i18n="systems_sub">portfolio en vivo — estado actual de cada proyecto desarrollado</p>
     <div class="grid">
       <div class="card">
         <div class="panel-bar">
@@ -589,7 +607,7 @@
         </div>
         <div class="card-body">
           <h3>AI Credit &amp; Collections</h3>
-          <p>Automatización con IA para priorización de cobros: forecast, aging, riesgo y scoring en Power BI, más un agente que rutea y clasifica emails de cobranzas.</p>
+          <p data-i18n="card_ai_desc">Automatización con IA para priorización de cobros: forecast, aging, riesgo y scoring en Power BI, más un agente que rutea y clasifica emails de cobranzas.</p>
         </div>
       </div>
       <div class="card">
@@ -602,7 +620,7 @@
         </div>
         <div class="card-body">
           <h3>Financial Forecast Automation</h3>
-          <p>Forecast de cobros con Python + IA: detección automática de errores y cuantificación de riesgo sobre datos regionales de España.</p>
+          <p data-i18n="card_forecast_desc">Forecast de cobros con Python + IA: detección automática de errores y cuantificación de riesgo sobre datos regionales de España.</p>
         </div>
       </div>
       <div class="card">
@@ -615,7 +633,7 @@
         </div>
         <div class="card-body">
           <h3>Information Security Program</h3>
-          <p>Programa interno de concientización: 142 personas capacitadas en 6 sesiones globales, con equipos de Filipinas, China, India y Argentina.</p>
+          <p data-i18n="card_infosec_desc">Programa interno de concientización: 142 personas capacitadas en 6 sesiones globales, con equipos de Filipinas, China, India y Argentina.</p>
         </div>
       </div>
       <div class="card">
@@ -628,7 +646,7 @@
         </div>
         <div class="card-body">
           <h3>Crypto Market Bots</h3>
-          <p>Sistemas propios de trading algorítmico: detección de régimen, funding rate arbitrage, mean-reversion Z-score y motor de backtesting con numpy.</p>
+          <p data-i18n="card_crypto_desc">Sistemas propios de trading algorítmico: detección de régimen, funding rate arbitrage, mean-reversion Z-score y motor de backtesting con numpy.</p>
         </div>
       </div>
     </div>
@@ -637,8 +655,8 @@
 
 <section class="contact" id="contact">
   <div class="wrap center">
-    <h2>Hablemos de Management, mercados o Infosec.</h2>
-    <p>Abierto a charlar sobre trading algorítmico, automatización de procesos, planning o intercambiar ideas de hacking.</p>
+    <h2 data-i18n="contact_h2">Hablemos de Management, mercados o Infosec.</h2>
+    <p data-i18n="contact_p">Abierto a charlar sobre trading algorítmico, automatización de procesos, planning o intercambiar ideas de hacking.</p>
     <div class="links">
       <a href="https://github.com/Terereboy" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.29 9.42 7.86 10.95.57.1.78-.25.78-.55 0-.27-.01-1-.02-1.96-3.2.7-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.4-5.28 5.69.42.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .3.2.66.79.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
@@ -671,50 +689,103 @@
 <script>
 (function(){
   var data = {
-    cg: {
-      title: "Control de Gestión & FP&A",
-      entries: [
-        { company: "Accenture", period: "2021 — presente" },
-        { company: "Alcatel Mobile", period: "2014 — 2018" },
-        { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
-      ]
+    es: {
+      cg: {
+        title: "Control de Gestión & FP&A",
+        entries: [
+          { company: "Accenture", period: "2021 — presente" },
+          { company: "Alcatel Mobile", period: "2014 — 2018" },
+          { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+        ]
+      },
+      costos: {
+        title: "Costos",
+        entries: [
+          { company: "Cervecería y Maltería Quilmes", period: "2008 — 2012" },
+          { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+        ]
+      },
+      cobranzas: {
+        title: "Créditos y Cobranzas",
+        entries: [
+          { company: "Accenture", period: "2021 — presente" },
+          { company: "Radio Victoria Fueguina", period: "2018 — 2021" }
+        ]
+      },
+      cashflow: {
+        title: "Cash Flow",
+        entries: [
+          { company: "Radio Victoria Fueguina", period: "2018 — 2021" },
+          { company: "Alcatel Mobile", period: "2014 — 2018" },
+          { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+        ]
+      },
+      ia: {
+        title: "IA & Automatización",
+        entries: [
+          { company: "Accenture", period: "2021 — presente" }
+        ],
+        note: "Copilot Aviator, agente de IA para Créditos y Cobranzas (−80/90% esfuerzo manual)"
+      },
+      lead: {
+        title: "Liderazgo & Information Security",
+        entries: [
+          { company: "Accenture", period: "2021 — presente" }
+        ],
+        note: "Lead global de Information Security — 150 colaboradores, 4 analistas coordinados"
+      }
     },
-    costos: {
-      title: "Costos",
-      entries: [
-        { company: "Cervecería y Maltería Quilmes", period: "2008 — 2012" },
-        { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
-      ]
-    },
-    cobranzas: {
-      title: "Créditos y Cobranzas",
-      entries: [
-        { company: "Accenture", period: "2021 — presente" },
-        { company: "Radio Victoria Fueguina", period: "2018 — 2021" }
-      ]
-    },
-    cashflow: {
-      title: "Cash Flow",
-      entries: [
-        { company: "Radio Victoria Fueguina", period: "2018 — 2021" },
-        { company: "Alcatel Mobile", period: "2014 — 2018" },
-        { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
-      ]
-    },
-    ia: {
-      title: "IA & Automatización",
-      entries: [
-        { company: "Accenture", period: "2021 — presente" }
-      ],
-      note: "Copilot Aviator, agente de IA para Créditos y Cobranzas (−80/90% esfuerzo manual)"
-    },
-    lead: {
-      title: "Liderazgo & Information Security",
-      entries: [
-        { company: "Accenture", period: "2021 — presente" }
-      ],
-      note: "Lead global de Information Security — 150 colaboradores, 4 analistas coordinados"
+    en: {
+      cg: {
+        title: "Management Control & FP&A",
+        entries: [
+          { company: "Accenture", period: "2021 — present" },
+          { company: "Alcatel Mobile", period: "2014 — 2018" },
+          { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+        ]
+      },
+      costos: {
+        title: "Costs",
+        entries: [
+          { company: "Cervecería y Maltería Quilmes", period: "2008 — 2012" },
+          { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+        ]
+      },
+      cobranzas: {
+        title: "Credit & Collections",
+        entries: [
+          { company: "Accenture", period: "2021 — present" },
+          { company: "Radio Victoria Fueguina", period: "2018 — 2021" }
+        ]
+      },
+      cashflow: {
+        title: "Cash Flow",
+        entries: [
+          { company: "Radio Victoria Fueguina", period: "2018 — 2021" },
+          { company: "Alcatel Mobile", period: "2014 — 2018" },
+          { company: "IRSA Inversiones y Representaciones", period: "2012 — 2014" }
+        ]
+      },
+      ia: {
+        title: "AI & Automation",
+        entries: [
+          { company: "Accenture", period: "2021 — present" }
+        ],
+        note: "Copilot Aviator, AI agent for Credit & Collections (−80/90% manual effort)"
+      },
+      lead: {
+        title: "Leadership & Information Security",
+        entries: [
+          { company: "Accenture", period: "2021 — present" }
+        ],
+        note: "Global Information Security lead — 150 collaborators, 4 analysts coordinated"
+      }
     }
+  };
+
+  var placeholders = {
+    es: "$ pasá el mouse o tocá un segmento para ver empresa y período",
+    en: "$ hover or tap a segment to see company and period"
   };
 
   var cloud = document.getElementById('tagCloud');
@@ -726,9 +797,10 @@
   var isTouch = window.matchMedia('(hover: none)').matches;
 
   function render(key){
-    var item = data[key];
+    var lang = window.appLang || 'es';
+    var item = data[lang][key];
     if(!item){
-      output.innerHTML = '<p class="tag-output-placeholder">$ pasá el mouse o tocá un segmento para ver empresa y período</p>';
+      output.innerHTML = '<p class="tag-output-placeholder">' + placeholders[lang] + '</p>';
       return;
     }
     var html = '<p class="tag-output-title">' + item.title + '</p>';
@@ -785,6 +857,104 @@
       render(null);
       setActive(null);
     }
+  });
+
+  window.tagCloudRerender = function(){
+    render(pinnedKey);
+  };
+})();
+</script>
+
+<script>
+(function(){
+  var translations = {
+    es: {
+      nav_about: "about",
+      nav_systems: "systems",
+      nav_contact: "contact",
+      lede: "Profesional Senior de Finanzas que usa IA y automatización para mejorar procesos financieros y la toma de decisiones",
+      label_resumen: "// resumen",
+      text_resumen: "18+ años en Control de Gestión y FP&A, formado en compañías multinacionales líderes de su industria. Experiencia en costos, cash flow, créditos y cobranzas, con equipos y proyectos de alcance regional e internacional.",
+      label_segments: "// segmentos — pasá el mouse o tocá",
+      tag_placeholder: "$ pasá el mouse o tocá un segmento para ver empresa y período",
+      tag_cg: "control_gestión_fp&a",
+      tag_costos: "costos",
+      tag_cobranzas: "créditos_cobranzas",
+      tag_cashflow: "cash_flow",
+      tag_ia: "ia_automatización",
+      tag_lead: "liderazgo_infosec",
+      label_highlight: "// bolsa & automatización con IA",
+      text_highlight: "10+ años operando manualmente en mercados argentinos. Hoy construye sistemas propios de trading algorítmico — backtesting, detección de régimen de mercado, automatización end-to-end — y lidera adopción de IA en Finanzas, con casos de uso que redujeron 80-90% el esfuerzo manual en procesos críticos.",
+      systems_sub: "portfolio en vivo — estado actual de cada proyecto desarrollado",
+      card_ai_desc: "Automatización con IA para priorización de cobros: forecast, aging, riesgo y scoring en Power BI, más un agente que rutea y clasifica emails de cobranzas.",
+      card_forecast_desc: "Forecast de cobros con Python + IA: detección automática de errores y cuantificación de riesgo sobre datos regionales de España.",
+      card_infosec_desc: "Programa interno de concientización: 142 personas capacitadas en 6 sesiones globales, con equipos de Filipinas, China, India y Argentina.",
+      card_crypto_desc: "Sistemas propios de trading algorítmico: detección de régimen, funding rate arbitrage, mean-reversion Z-score y motor de backtesting con numpy.",
+      contact_h2: "Hablemos de Management, mercados o Infosec.",
+      contact_p: "Abierto a charlar sobre trading algorítmico, automatización de procesos, planning o intercambiar ideas de hacking."
+    },
+    en: {
+      nav_about: "about",
+      nav_systems: "systems",
+      nav_contact: "contact",
+      lede: "Senior Finance professional who uses AI and automation to improve financial processes and decision-making",
+      label_resumen: "// summary",
+      text_resumen: "18+ years in Management Control and FP&A, built at leading multinational companies. Experience across cost accounting, cash flow, credit and collections, leading teams and projects with regional and international scope.",
+      label_segments: "// segments — hover or tap",
+      tag_placeholder: "$ hover or tap a segment to see company and period",
+      tag_cg: "management_control_fpna",
+      tag_costos: "costs",
+      tag_cobranzas: "credit_collections",
+      tag_cashflow: "cash_flow",
+      tag_ia: "ai_automation",
+      tag_lead: "leadership_infosec",
+      label_highlight: "// trading & AI automation",
+      text_highlight: "10+ years trading manually in Argentine markets. Today he builds his own algorithmic trading systems — backtesting, market regime detection, end-to-end automation — and leads AI adoption in Finance, with use cases that cut manual effort by 80-90% in critical processes.",
+      systems_sub: "live portfolio — current status of each project",
+      card_ai_desc: "AI-driven automation for collections prioritization: forecast, aging, risk and scoring in Power BI, plus an agent that routes and classifies collections emails.",
+      card_forecast_desc: "Collections forecasting with Python + AI: automatic error detection and risk quantification over regional Spain data.",
+      card_infosec_desc: "Internal awareness program: 142 people trained across 6 global sessions, with teams from the Philippines, China, India and Argentina.",
+      card_crypto_desc: "Proprietary algorithmic trading systems: regime detection, funding rate arbitrage, mean-reversion Z-score, and a numpy-powered backtesting engine.",
+      contact_h2: "Let's talk Management, markets, or Infosec.",
+      contact_p: "Open to discussing algorithmic trading, process automation, planning, or exchanging hacking ideas."
+    }
+  };
+
+  var STORAGE_KEY = 'daro_lang';
+  var btn = document.getElementById('langToggle');
+  if(!btn) return;
+
+  function getInitialLang(){
+    try{
+      var saved = localStorage.getItem(STORAGE_KEY);
+      if(saved === 'es' || saved === 'en') return saved;
+    }catch(e){}
+    return 'es';
+  }
+
+  function applyLang(lang){
+    var dict = translations[lang];
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.dataset.i18n;
+      if(dict[key] !== undefined){
+        el.textContent = dict[key];
+      }
+    });
+    document.documentElement.lang = lang;
+    btn.textContent = lang === 'es' ? 'EN' : 'ES';
+    window.appLang = lang;
+    if(typeof window.tagCloudRerender === 'function'){
+      window.tagCloudRerender();
+    }
+    try{ localStorage.setItem(STORAGE_KEY, lang); }catch(e){}
+  }
+
+  var currentLang = getInitialLang();
+  applyLang(currentLang);
+
+  btn.addEventListener('click', function(){
+    currentLang = currentLang === 'es' ? 'en' : 'es';
+    applyLang(currentLang);
   });
 })();
 </script>
