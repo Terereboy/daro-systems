@@ -50,14 +50,24 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 .daily{margin-top:62px;padding-top:28px;border-top:1px solid var(--line)}
 .daily h2{font:500 22px 'Newsreader',serif;margin:0 0 6px;color:#F2F5F1}
 .daily-sub{font-size:11px;color:var(--soft);margin:0 0 24px}
-.daily-row{display:grid;grid-template-columns:150px 1fr 64px;gap:18px;align-items:center}
-.daily-face{font-size:52px;text-align:center}
-.daily-battery{height:58px;border:2px solid var(--ink);border-radius:8px;padding:5px;position:relative}
-.daily-battery:after{content:"";position:absolute;right:-9px;top:16px;width:7px;height:22px;background:var(--ink);border-radius:0 3px 3px 0}
-.daily-charge{height:100%;width:0;background:var(--accent);border-radius:4px;transition:width .3s ease}
-.daily-percent{font:500 28px 'Newsreader',serif;color:#F2F5F1}
-.daily-label{grid-column:2 / 4;color:var(--soft);font-size:11px;margin-top:-10px}
-@media(max-width:620px){main{padding-top:48px}.metrics{grid-template-columns:1fr}.content{padding:22px}.battery{height:78px}.battery:after{top:23px;height:26px}.level{font-size:31px}.daily-row{grid-template-columns:62px 1fr 52px}.daily-face{font-size:38px}.daily-label{grid-column:1 / -1;margin-top:0}}
+.daily-scale{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;align-items:end}
+.practice-stage{text-align:center;color:var(--dim);opacity:.38;transition:opacity .2s ease,transform .2s ease}
+.practice-stage.reached{opacity:.72}.practice-stage.current{opacity:1;transform:translateY(-3px)}
+.stage-face{font-size:36px;line-height:1;margin-bottom:12px;filter:grayscale(.7)}
+.practice-stage.reached .stage-face,.practice-stage.current .stage-face{filter:none}
+.stage-battery{width:54px;height:72px;margin:0 auto 11px;border:2px solid currentColor;border-radius:7px;padding:5px;position:relative;display:flex;flex-direction:column-reverse;gap:3px}
+.stage-battery:before{content:"";position:absolute;top:-8px;left:16px;width:18px;height:6px;border:2px solid currentColor;border-bottom:0;border-radius:4px 4px 0 0}
+.stage-battery:after{content:"";position:absolute;inset:5px;background:transparent;border-radius:3px;z-index:-1}
+.segment{height:11px;border-radius:2px;background:var(--line)}
+.practice-stage.reached .segment.filled,.practice-stage.current .segment.filled{background:var(--accent)}
+.practice-stage[data-step="0"].current{color:#E0645C}.practice-stage[data-step="25"].current{color:var(--amber)}
+.practice-stage[data-step="50"].current,.practice-stage[data-step="75"].current{color:#D9D94A}
+.practice-stage[data-step="100"].current,.practice-stage[data-step="charging"].current{color:var(--accent)}
+.stage-value{font-size:12px;color:var(--soft)}
+.charging-bolt{height:100%;display:grid;place-items:center;font-size:27px;color:var(--accent)}
+.daily-summary{margin:24px 0 0;text-align:center;color:var(--soft);font-size:11px}
+.daily-summary strong{color:var(--ink);font-weight:500}
+@media(max-width:620px){main{padding-top:48px}.metrics{grid-template-columns:1fr}.content{padding:22px}.battery{height:78px}.battery:after{top:23px;height:26px}.level{font-size:31px}.daily-scale{grid-template-columns:repeat(3,1fr);gap:24px 10px}.stage-face{font-size:32px}}
 </style>
 </head>
 <body>
@@ -74,7 +84,7 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 <div class="battery-row" aria-label="Current level pending initial assessment">
 <div class="battery"><div class="charge" id="level-charge"></div></div><div class="level" id="current-level">—%</div>
 </div>
-<p class="label">CURRENT PROFESSIONAL ENGLISH LEVEL · 100% = NATIVE-LIKE PROFESSIONAL PERFORMANCE</p>
+<p class="label">CURRENT PROFESSIONAL ENGLISH LEVEL · <span id="mastery-units">600,000</span> / 1,000,000 UNITS · 100% = NATIVE-LIKE PROFESSIONAL PERFORMANCE</p>
 </div>
 <div>
 <div class="stat"><strong id="baseline-progress">0.0%</strong><span>EVOLUTION FROM BASELINE</span></div>
@@ -91,12 +101,15 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 <section class="daily" aria-labelledby="daily-title">
 <h2 id="daily-title">Daily Practice</h2>
 <p class="daily-sub">Today's activity only · automatically returns to 0% on a new day</p>
-<div class="daily-row">
-<div class="daily-face" id="daily-face" aria-hidden="true">🔴</div>
-<div class="daily-battery"><div class="daily-charge" id="daily-charge"></div></div>
-<div class="daily-percent" id="daily-percent">0%</div>
-<div class="daily-label" id="daily-label">No practice today</div>
+<div class="daily-scale" id="daily-scale" aria-label="Daily practice progress">
+<div class="practice-stage" data-step="0"><div class="stage-face" aria-hidden="true">😵</div><div class="stage-battery"><span class="segment"></span><span class="segment"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">undefined</div></div>
+<div class="practice-stage" data-step="25"><div class="stage-face" aria-hidden="true">😨</div><div class="stage-battery"><span class="segment filled"></span><span class="segment"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">undefined</div></div>
+<div class="practice-stage" data-step="50"><div class="stage-face" aria-hidden="true">😐</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">undefined</div></div>
+<div class="practice-stage" data-step="75"><div class="stage-face" aria-hidden="true">🙂</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span><span class="segment"></span></div><div class="stage-value">undefined</div></div>
+<div class="practice-stage" data-step="100"><div class="stage-face" aria-hidden="true">😄</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span></div><div class="stage-value">undefined</div></div>
+<div class="practice-stage" data-step="charging"><div class="stage-face" aria-hidden="true">😋</div><div class="stage-battery"><span class="charging-bolt">⚡</span></div><div class="stage-value">undefined</div></div>
 </div>
+<p class="daily-summary"><strong id="daily-summary-value">0%</strong> · <span id="daily-summary-label">No practice today</span></p>
 </section>
 <p class="method"><strong>Method:</strong> periodic comparable assessments. Daily practice is shown separately and does not inflate the public level.</p>
 </div>
@@ -113,15 +126,27 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
   document.getElementById('level-status').textContent=level===null?'calibration pending':'level measured';
   document.getElementById('baseline-progress').textContent=((d.progressFromBaseline||0)>=0?'+':'')+(d.progressFromBaseline||0).toFixed(1)+'%';
   document.getElementById('last-assessment').textContent=d.lastAssessment||'Not assessed';
+  document.getElementById('mastery-units').textContent=(d.masteryUnits||0).toLocaleString('en-US');
 
   var today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   var daily=d.dailyPractice||{};
   var pct=daily.date===today?Math.max(0,Math.min(100,Number(daily.percent)||0)):0;
-  var labels=pct===0?['🔴','No practice today']:pct<50?['🟠','Practice started']:pct<75?['🟡','Partial session']:pct<100?['🟢','Daily target completed']:['⚡','Full session + target achieved'];
-  document.getElementById('daily-face').textContent=labels[0];
-  document.getElementById('daily-charge').style.width=pct+'%';
-  document.getElementById('daily-percent').textContent=Math.round(pct)+'%';
-  document.getElementById('daily-label').textContent=daily.date===today&&daily.label?daily.label:labels[1];
+  var exactPct=Math.round(pct);
+  var bucket=exactPct===100?100:Math.floor(exactPct/25)*25;
+  var labels={0:'No practice today',25:'Building momentum',50:'Developing',75:'Strong practice',100:'Daily peak'};
+  var stages=Array.prototype.slice.call(document.querySelectorAll('.practice-stage'));
+  stages.forEach(function(stage){
+    var raw=stage.getAttribute('data-step');
+    if(raw==='charging'){
+      stage.classList.toggle('current',exactPct>0&&exactPct<100);
+      return;
+    }
+    var step=Number(raw);
+    stage.classList.toggle('reached',step<=bucket);
+    stage.classList.toggle('current',step===bucket);
+  });
+  document.getElementById('daily-summary-value').textContent=exactPct+'%';
+  document.getElementById('daily-summary-label').textContent=daily.date===today&&daily.label?daily.label:labels[bucket];
 })();
 </script>
 </body>
