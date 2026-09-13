@@ -77,14 +77,14 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 <h1>English Speaking Progress</h1>
 <p class="lede">A personal measurement system for professional English. It separates current ability from improvement since the first assessment.</p>
 <section class="panel" aria-labelledby="dashboard-title">
-<div class="panel-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span id="dashboard-title">progress.json</span><span class="status" id="level-status">calibration pending</span></div>
+<div class="panel-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span id="dashboard-title">progress</span><span class="status" id="level-status">calibration pending</span></div>
 <div class="content">
 <div class="metrics">
 <div>
 <div class="battery-row" aria-label="Current level pending initial assessment">
 <div class="battery"><div class="charge" id="level-charge"></div></div><div class="level" id="current-level">—%</div>
 </div>
-<p class="label">CURRENT PROFESSIONAL ENGLISH LEVEL · <span id="mastery-units">600,000</span> / 1,000,000 UNITS · 100% = NATIVE-LIKE PROFESSIONAL PERFORMANCE</p>
+<p class="label">CURRENT PROFESSIONAL ENGLISH LEVEL | 100% = NATIVE-LIKE PROFESSIONAL PERFORMANCE</p>
 </div>
 <div>
 <div class="stat"><strong id="baseline-progress">0.0%</strong><span>EVOLUTION FROM BASELINE</span></div>
@@ -102,12 +102,12 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 <h2 id="daily-title">Daily Practice</h2>
 <p class="daily-sub">Today's activity only · automatically returns to 0% on a new day</p>
 <div class="daily-scale" id="daily-scale" aria-label="Daily practice progress">
-<div class="practice-stage" data-step="0"><div class="stage-face" aria-hidden="true">😵</div><div class="stage-battery"><span class="segment"></span><span class="segment"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">undefined</div></div>
-<div class="practice-stage" data-step="25"><div class="stage-face" aria-hidden="true">😨</div><div class="stage-battery"><span class="segment filled"></span><span class="segment"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">undefined</div></div>
-<div class="practice-stage" data-step="50"><div class="stage-face" aria-hidden="true">😐</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">undefined</div></div>
-<div class="practice-stage" data-step="75"><div class="stage-face" aria-hidden="true">🙂</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span><span class="segment"></span></div><div class="stage-value">undefined</div></div>
-<div class="practice-stage" data-step="100"><div class="stage-face" aria-hidden="true">😄</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span></div><div class="stage-value">undefined</div></div>
-<div class="practice-stage" data-step="charging"><div class="stage-face" aria-hidden="true">😋</div><div class="stage-battery"><span class="charging-bolt">⚡</span></div><div class="stage-value">undefined</div></div>
+<div class="practice-stage" data-step="0"><div class="stage-face" aria-hidden="true">😵</div><div class="stage-battery"><span class="segment"></span><span class="segment"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">Needs work</div></div>
+<div class="practice-stage" data-step="25"><div class="stage-face" aria-hidden="true">😨</div><div class="stage-battery"><span class="segment filled"></span><span class="segment"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">Not bad</div></div>
+<div class="practice-stage" data-step="50"><div class="stage-face" aria-hidden="true">😐</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment"></span><span class="segment"></span></div><div class="stage-value">Getting there</div></div>
+<div class="practice-stage" data-step="75"><div class="stage-face" aria-hidden="true">🙂</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span><span class="segment"></span></div><div class="stage-value">Good!</div></div>
+<div class="practice-stage" data-step="100"><div class="stage-face" aria-hidden="true">😄</div><div class="stage-battery"><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span><span class="segment filled"></span></div><div class="stage-value">Spot on!</div></div>
+<div class="practice-stage" data-step="charging"><div class="stage-face" aria-hidden="true">😋</div><div class="stage-battery"><span class="charging-bolt">⚡</span></div><div class="stage-value">You nailed it!</div></div>
 </div>
 <p class="daily-summary"><strong id="daily-summary-value">0%</strong> · <span id="daily-summary-label">No practice today</span></p>
 </section>
@@ -126,7 +126,6 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
   document.getElementById('level-status').textContent=level===null?'calibration pending':'level measured';
   document.getElementById('baseline-progress').textContent=((d.progressFromBaseline||0)>=0?'+':'')+(d.progressFromBaseline||0).toFixed(1)+'%';
   document.getElementById('last-assessment').textContent=d.lastAssessment||'Not assessed';
-  document.getElementById('mastery-units').textContent=(d.masteryUnits||0).toLocaleString('en-US');
 
   var today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   var daily=d.dailyPractice||{};
