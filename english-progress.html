@@ -47,7 +47,17 @@ h1{font:500 clamp(34px,6vw,54px)/1.1 'Newsreader',serif;color:#F2F5F1;margin:0 0
 .empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font-size:12px;text-align:center;padding:20px}
 .method{margin-top:62px;color:var(--soft);font-size:12px}.method strong{color:var(--ink);font-weight:500}
 footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-size:11px}
-@media(max-width:620px){main{padding-top:48px}.metrics{grid-template-columns:1fr}.content{padding:22px}.battery{height:78px}.battery:after{top:23px;height:26px}.level{font-size:31px}}
+.daily{margin-top:62px;padding-top:28px;border-top:1px solid var(--line)}
+.daily h2{font:500 22px 'Newsreader',serif;margin:0 0 6px;color:#F2F5F1}
+.daily-sub{font-size:11px;color:var(--soft);margin:0 0 24px}
+.daily-row{display:grid;grid-template-columns:150px 1fr 64px;gap:18px;align-items:center}
+.daily-face{font-size:52px;text-align:center}
+.daily-battery{height:58px;border:2px solid var(--ink);border-radius:8px;padding:5px;position:relative}
+.daily-battery:after{content:"";position:absolute;right:-9px;top:16px;width:7px;height:22px;background:var(--ink);border-radius:0 3px 3px 0}
+.daily-charge{height:100%;width:0;background:var(--accent);border-radius:4px;transition:width .3s ease}
+.daily-percent{font:500 28px 'Newsreader',serif;color:#F2F5F1}
+.daily-label{grid-column:2 / 4;color:var(--soft);font-size:11px;margin-top:-10px}
+@media(max-width:620px){main{padding-top:48px}.metrics{grid-template-columns:1fr}.content{padding:22px}.battery{height:78px}.battery:after{top:23px;height:26px}.level{font-size:31px}.daily-row{grid-template-columns:62px 1fr 52px}.daily-face{font-size:38px}.daily-label{grid-column:1 / -1;margin-top:0}}
 </style>
 </head>
 <body>
@@ -57,18 +67,18 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 <h1>English Speaking Progress</h1>
 <p class="lede">A personal measurement system for professional English. It separates current ability from improvement since the first assessment.</p>
 <section class="panel" aria-labelledby="dashboard-title">
-<div class="panel-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span id="dashboard-title">progress.json</span><span class="status">calibration pending</span></div>
+<div class="panel-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span id="dashboard-title">progress.json</span><span class="status" id="level-status">calibration pending</span></div>
 <div class="content">
 <div class="metrics">
 <div>
 <div class="battery-row" aria-label="Current level pending initial assessment">
-<div class="battery"><div class="charge"></div></div><div class="level">—%</div>
+<div class="battery"><div class="charge" id="level-charge"></div></div><div class="level" id="current-level">—%</div>
 </div>
 <p class="label">CURRENT PROFESSIONAL ENGLISH LEVEL · 100% = NATIVE-LIKE PROFESSIONAL PERFORMANCE</p>
 </div>
 <div>
-<div class="stat"><strong>0.0%</strong><span>EVOLUTION FROM BASELINE</span></div>
-<div class="stat"><strong>Not assessed</strong><span>LAST STANDARDIZED CHECK</span></div>
+<div class="stat"><strong id="baseline-progress">0.0%</strong><span>EVOLUTION FROM BASELINE</span></div>
+<div class="stat"><strong id="last-assessment">Not assessed</strong><span>LAST STANDARDIZED CHECK</span></div>
 </div>
 </div>
 <div class="chart">
@@ -78,10 +88,41 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 <div class="empty">The first assessment will establish the baseline.<br>Future measurements may move up or down.</div>
 </div>
 </div>
-<p class="method"><strong>Method:</strong> periodic comparable assessments. Practice frequency is tracked privately and does not inflate the public level.</p>
+<section class="daily" aria-labelledby="daily-title">
+<h2 id="daily-title">Daily Practice</h2>
+<p class="daily-sub">Today's activity only · automatically returns to 0% on a new day</p>
+<div class="daily-row">
+<div class="daily-face" id="daily-face" aria-hidden="true">🔴</div>
+<div class="daily-battery"><div class="daily-charge" id="daily-charge"></div></div>
+<div class="daily-percent" id="daily-percent">0%</div>
+<div class="daily-label" id="daily-label">No practice today</div>
+</div>
+</section>
+<p class="method"><strong>Method:</strong> periodic comparable assessments. Daily practice is shown separately and does not inflate the public level.</p>
 </div>
 </section>
 </div></main>
 <footer><div class="wrap">daro.systems · measurable progress, not vanity metrics</div></footer>
+<script src="english-progress-data.js"></script>
+<script>
+(function(){
+  var d=window.englishProgress||{};
+  var level=Number.isFinite(d.currentLevel)?d.currentLevel:null;
+  document.getElementById('current-level').textContent=level===null?'—%':Math.round(level)+'%';
+  document.getElementById('level-charge').style.width=(level||0)+'%';
+  document.getElementById('level-status').textContent=level===null?'calibration pending':'level measured';
+  document.getElementById('baseline-progress').textContent=((d.progressFromBaseline||0)>=0?'+':'')+(d.progressFromBaseline||0).toFixed(1)+'%';
+  document.getElementById('last-assessment').textContent=d.lastAssessment||'Not assessed';
+
+  var today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  var daily=d.dailyPractice||{};
+  var pct=daily.date===today?Math.max(0,Math.min(100,Number(daily.percent)||0)):0;
+  var labels=pct===0?['🔴','No practice today']:pct<50?['🟠','Practice started']:pct<75?['🟡','Partial session']:pct<100?['🟢','Daily target completed']:['⚡','Full session + target achieved'];
+  document.getElementById('daily-face').textContent=labels[0];
+  document.getElementById('daily-charge').style.width=pct+'%';
+  document.getElementById('daily-percent').textContent=Math.round(pct)+'%';
+  document.getElementById('daily-label').textContent=daily.date===today&&daily.label?daily.label:labels[1];
+})();
+</script>
 </body>
 </html>

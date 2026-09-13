@@ -474,6 +474,13 @@
     margin: 0;
   }
 
+  .mini-progress{ margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+  .mini-progress-head{ display:flex; justify-content:space-between; gap:10px; margin-bottom:8px; font-size:10.5px; color:var(--ink-soft); }
+  .mini-battery{ height:16px; border:1px solid var(--ink-soft); border-radius:3px; padding:2px; position:relative; }
+  .mini-battery::after{ content:""; position:absolute; right:-5px; top:4px; width:3px; height:6px; border-radius:0 2px 2px 0; background:var(--ink-soft); }
+  .mini-charge{ height:100%; width:0; border-radius:1px; background:var(--accent); }
+  .mini-evolution{ margin-top:7px; font-size:10.5px; color:var(--ink-dim); }
+
   .contact{ padding: 80px 0 90px; }
   .contact h2{
     font-family: 'Newsreader', serif;
@@ -740,6 +747,11 @@
         <div class="card-body">
           <h3>English Progress Tracker</h3>
           <p data-i18n="card_english_desc">Sistema medible para seguir el nivel de inglés profesional y su evolución mediante evaluaciones comparables.</p>
+          <div class="mini-progress">
+            <div class="mini-progress-head"><span>ENGLISH LEVEL</span><strong id="miniLevel">—%</strong></div>
+            <div class="mini-battery"><div class="mini-charge" id="miniCharge"></div></div>
+            <div class="mini-evolution">EVOLUTION <span id="miniEvolution">+0.0%</span></div>
+          </div>
         </div>
       </a>
     </div>
@@ -1115,6 +1127,19 @@
     });
   }, { threshold: 0.4 });
   observer.observe(container);
+})();
+</script>
+<script src="english-progress-data.js"></script>
+<script>
+(function(){
+  var d=window.englishProgress||{};
+  var level=Number.isFinite(d.currentLevel)?d.currentLevel:null;
+  var el=document.getElementById('miniLevel');
+  var charge=document.getElementById('miniCharge');
+  var evolution=document.getElementById('miniEvolution');
+  if(el) el.textContent=level===null?'—%':Math.round(level)+'%';
+  if(charge) charge.style.width=(level||0)+'%';
+  if(evolution){var p=d.progressFromBaseline||0;evolution.textContent=(p>=0?'+':'')+p.toFixed(1)+'%';}
 })();
 </script>
 </body>
