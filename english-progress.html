@@ -84,7 +84,7 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 <div class="battery-row" aria-label="Current level pending initial assessment">
 <div class="battery"><div class="charge" id="level-charge"></div></div><div class="level" id="current-level">—%</div>
 </div>
-<p class="label">CURRENT PROFESSIONAL ENGLISH LEVEL · 100% = NATIVE-LIKE PROFESSIONAL PERFORMANCE</p>
+<p class="label">CURRENT PROFESSIONAL ENGLISH LEVEL · <span id="mastery-units">600,000</span> / 1,000,000 UNITS · 100% = NATIVE-LIKE PROFESSIONAL PERFORMANCE</p>
 </div>
 <div>
 <div class="stat"><strong id="baseline-progress">0.0%</strong><span>EVOLUTION FROM BASELINE</span></div>
@@ -126,25 +126,27 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
   document.getElementById('level-status').textContent=level===null?'calibration pending':'level measured';
   document.getElementById('baseline-progress').textContent=((d.progressFromBaseline||0)>=0?'+':'')+(d.progressFromBaseline||0).toFixed(1)+'%';
   document.getElementById('last-assessment').textContent=d.lastAssessment||'Not assessed';
+  document.getElementById('mastery-units').textContent=(d.masteryUnits||0).toLocaleString('en-US');
 
   var today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   var daily=d.dailyPractice||{};
   var pct=daily.date===today?Math.max(0,Math.min(100,Number(daily.percent)||0)):0;
-  pct=Math.round(pct/25)*25;
-  var labels={0:'No practice today',25:'1 practice block',50:'2 practice blocks',75:'3 practice blocks',100:'4 practice blocks · daily goal reached'};
+  var exactPct=Math.round(pct);
+  var bucket=exactPct===100?100:Math.floor(exactPct/25)*25;
+  var labels={0:'No practice today',25:'Building momentum',50:'Developing',75:'Strong practice',100:'Daily peak'};
   var stages=Array.prototype.slice.call(document.querySelectorAll('.practice-stage'));
   stages.forEach(function(stage){
     var raw=stage.getAttribute('data-step');
     if(raw==='charging'){
-      stage.classList.toggle('current',pct>0&&pct<100);
+      stage.classList.toggle('current',exactPct>0&&exactPct<100);
       return;
     }
     var step=Number(raw);
-    stage.classList.toggle('reached',step<=pct);
-    stage.classList.toggle('current',step===pct);
+    stage.classList.toggle('reached',step<=bucket);
+    stage.classList.toggle('current',step===bucket);
   });
-  document.getElementById('daily-summary-value').textContent=pct+'%';
-  document.getElementById('daily-summary-label').textContent=daily.date===today&&daily.label?daily.label:labels[pct];
+  document.getElementById('daily-summary-value').textContent=exactPct+'%';
+  document.getElementById('daily-summary-label').textContent=daily.date===today&&daily.label?daily.label:labels[bucket];
 })();
 </script>
 </body>
