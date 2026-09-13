@@ -8,11 +8,11 @@ window.englishProgress = {
     { date: "2026-09-13", units: 600000, level: 60, label: "Solid B2 baseline" }
   ],
   dailyPractice: {
-    date: null,
-    percent: 0,
-    label: "No practice today",
-    scoredBlocks: 0,
+    date: "2026-09-13",
+    percent: 70,
+    label: "Solid session · real-time task description",
+    scoredBlocks: 1,
     generalDelta: 0,
-    lastSessionScore: null
+    lastSessionScore: 70
   }
 };
