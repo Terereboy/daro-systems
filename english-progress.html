@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Progress Tracker — Daro Systems</title>
+<meta name="description" content="A measurable system for tracking professional English speaking progress over time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0D0B;--panel:#101512;--panel2:#0D1210;--line:#223028;--ink:#DCE5DE;--soft:#7C8B82;--dim:#4E5A53;--accent:#2FE18C;--amber:#E0A54B}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Mono',monospace;line-height:1.6}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:repeating-linear-gradient(0deg,var(--accent) 0 1px,transparent 1px 40px),repeating-linear-gradient(90deg,var(--accent) 0 1px,transparent 1px 40px)}
+.wrap{max-width:860px;margin:0 auto;padding:0 28px;position:relative}
+header{padding:22px 0;border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-size:13px}.prompt{color:var(--accent)}
+.back{color:var(--soft);font-size:12px;text-decoration:none}.back:hover{color:var(--accent)}
+main{padding:72px 0 90px}
+.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.08em;margin:0 0 14px}.eyebrow:before{content:"$ ";color:var(--dim)}
+h1{font:500 clamp(34px,6vw,54px)/1.1 'Newsreader',serif;color:#F2F5F1;margin:0 0 16px}
+.lede{color:var(--soft);max-width:62ch;font-size:14px;margin:0 0 42px}
+.panel{border:1px solid var(--line);background:var(--panel);border-radius:6px;overflow:hidden}
+.panel-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel2);font-size:11px;color:var(--dim)}
+.dot{width:9px;height:9px;border-radius:50%}.red{background:#E0645C}.yellow{background:var(--amber)}.green{background:var(--accent)}
+.status{margin-left:auto;color:var(--amber)}
+.content{padding:30px}
+.metrics{display:grid;grid-template-columns:1.2fr 1fr;gap:34px;align-items:center}
+.battery-row{display:flex;align-items:center;gap:14px}
+.battery{width:min(100%,310px);height:94px;border:3px solid var(--ink);border-radius:10px;padding:6px;position:relative}
+.battery:after{content:"";position:absolute;right:-11px;top:28px;width:8px;height:32px;background:var(--ink);border-radius:0 4px 4px 0}
+.charge{height:100%;width:0;background:var(--accent);border-radius:5px}
+.level{font:600 38px 'Newsreader',serif;color:#F2F5F1;white-space:nowrap}
+.label{font-size:11px;color:var(--soft);margin:10px 0 0}
+.stat{border-left:2px solid var(--line);padding:8px 0 8px 18px;margin:10px 0 18px}
+.stat strong{display:block;font:500 25px 'Newsreader',serif;color:#F2F5F1}
+.stat span{font-size:11px;color:var(--soft)}
+.chart{margin-top:34px;padding-top:28px;border-top:1px solid var(--line)}
+.chart-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:20px}
+.chart-head h2{font:500 22px 'Newsreader',serif;margin:0;color:#F2F5F1}
+.chart-head span{font-size:11px;color:var(--soft)}
+.graph{height:170px;position:relative;border-left:1px solid var(--line);border-bottom:1px solid var(--line);background:repeating-linear-gradient(to top,transparent 0 41px,var(--line) 42px)}
+.baseline{position:absolute;left:14px;bottom:-5px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.baseline-label{position:absolute;left:0;bottom:-34px;color:var(--soft);font-size:10px}
+.empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font-size:12px;text-align:center;padding:20px}
+.method{margin-top:62px;color:var(--soft);font-size:12px}.method strong{color:var(--ink);font-weight:500}
+footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-size:11px}
+@media(max-width:620px){main{padding-top:48px}.metrics{grid-template-columns:1fr}.content{padding:22px}.battery{height:78px}.battery:after{top:23px;height:26px}.level{font-size:31px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand"><span class="prompt">~/</span>daro.systems/english-progress</div><a class="back" href="index.html#systems">← back to systems</a></div></header>
+<main><div class="wrap">
+<p class="eyebrow">build in public</p>
+<h1>English Speaking Progress</h1>
+<p class="lede">A personal measurement system for professional English. It separates current ability from improvement since the first assessment.</p>
+<section class="panel" aria-labelledby="dashboard-title">
+<div class="panel-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span id="dashboard-title">progress.json</span><span class="status">calibration pending</span></div>
+<div class="content">
+<div class="metrics">
+<div>
+<div class="battery-row" aria-label="Current level pending initial assessment">
+<div class="battery"><div class="charge"></div></div><div class="level">—%</div>
+</div>
+<p class="label">CURRENT PROFESSIONAL ENGLISH LEVEL · 100% = NATIVE-LIKE PROFESSIONAL PERFORMANCE</p>
+</div>
+<div>
+<div class="stat"><strong>0.0%</strong><span>EVOLUTION FROM BASELINE</span></div>
+<div class="stat"><strong>Not assessed</strong><span>LAST STANDARDIZED CHECK</span></div>
+</div>
+</div>
+<div class="chart">
+<div class="chart-head"><h2>Evolution</h2><span>Comparable assessments over time</span></div>
+<div class="graph" role="img" aria-label="No progress history yet. Initial assessment pending.">
+<span class="baseline"></span><span class="baseline-label">START</span>
+<div class="empty">The first assessment will establish the baseline.<br>Future measurements may move up or down.</div>
+</div>
+</div>
+<p class="method"><strong>Method:</strong> periodic comparable assessments. Practice frequency is tracked privately and does not inflate the public level.</p>
+</div>
+</section>
+</div></main>
+<footer><div class="wrap">daro.systems · measurable progress, not vanity metrics</div></footer>
+</body>
+</html>
