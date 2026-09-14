@@ -88,7 +88,7 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 </div>
 <div>
 <div class="stat"><strong id="baseline-progress">0.0%</strong><span>EVOLUTION FROM BASELINE</span></div>
-<div class="stat"><strong id="last-assessment">Not assessed</strong><span>LAST STANDARDIZED CHECK</span></div>
+<div class="stat"><strong id="last-assessment">No practice registered</strong><span>LAST PRACTICE</span></div>
 </div>
 </div>
 <div class="chart">
@@ -126,10 +126,10 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
   document.getElementById('level-status').textContent=level===null?'calibration pending':'level measured';
   var baselineProgress=Number(d.progressFromBaseline)||0;
   document.getElementById('baseline-progress').textContent=(baselineProgress>=0?'+':'')+baselineProgress.toFixed(3)+'%';
-  document.getElementById('last-assessment').textContent=d.lastAssessment||'Not assessed';
-
   var today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   var daily=d.dailyPractice||{};
+  var lastPractice=daily.date?(daily.date+(daily.label?' · '+daily.label:'')):'No practice registered';
+  document.getElementById('last-assessment').textContent=lastPractice;
   var pct=daily.date===today?Math.max(0,Math.min(100,Number(daily.percent)||0)):0;
   var exactPct=Math.round(pct);
   var bucket=Math.max(0,Math.min(100,Math.round(exactPct/25)*25));
