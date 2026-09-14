@@ -51,15 +51,15 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 .daily h2{font:500 22px 'Newsreader',serif;margin:0 0 6px;color:#F2F5F1}
 .daily-sub{font-size:11px;color:var(--soft);margin:0 0 24px}
 .daily-scale{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;align-items:end}
-.practice-stage{text-align:center;color:var(--dim);opacity:.38;transition:opacity .2s ease,transform .2s ease}
-.practice-stage.reached{opacity:.72}.practice-stage.current{opacity:1;transform:translateY(-3px)}
-.stage-face{font-size:36px;line-height:1;margin-bottom:12px;filter:grayscale(.7)}
-.practice-stage.reached .stage-face,.practice-stage.current .stage-face{filter:none}
+.practice-stage{text-align:center;color:var(--dim);opacity:.34;filter:grayscale(1);transition:opacity .2s ease,transform .2s ease,filter .2s ease}
+.practice-stage.reached{opacity:.34}.practice-stage.current{opacity:1;filter:none;transform:translateY(-3px)}
+.stage-face{font-size:36px;line-height:1;margin-bottom:12px;filter:grayscale(1)}
+.practice-stage.current .stage-face{filter:none}
 .stage-battery{width:54px;height:72px;margin:0 auto 11px;border:2px solid currentColor;border-radius:7px;padding:5px;position:relative;display:flex;flex-direction:column-reverse;gap:3px}
 .stage-battery:before{content:"";position:absolute;top:-8px;left:16px;width:18px;height:6px;border:2px solid currentColor;border-bottom:0;border-radius:4px 4px 0 0}
 .stage-battery:after{content:"";position:absolute;inset:5px;background:transparent;border-radius:3px;z-index:-1}
 .segment{height:11px;border-radius:2px;background:var(--line)}
-.practice-stage.reached .segment.filled,.practice-stage.current .segment.filled{background:var(--accent)}
+.practice-stage.current .segment.filled{background:var(--accent);box-shadow:0 0 8px rgba(47,225,140,.28)}
 .practice-stage[data-step="0"].current{color:#E0645C}.practice-stage[data-step="25"].current{color:var(--amber)}
 .practice-stage[data-step="50"].current,.practice-stage[data-step="75"].current{color:#D9D94A}
 .practice-stage[data-step="100"].current,.practice-stage[data-step="charging"].current{color:var(--accent)}
@@ -121,28 +121,31 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 (function(){
   var d=window.englishProgress||{};
   var level=Number.isFinite(d.currentLevel)?d.currentLevel:null;
-  document.getElementById('current-level').textContent=level===null?'—%':Math.round(level)+'%';
+  document.getElementById('current-level').textContent=level===null?'—%':level.toFixed(3).replace(/\.?0+$/,'')+'%';
   document.getElementById('level-charge').style.width=(level||0)+'%';
   document.getElementById('level-status').textContent=level===null?'calibration pending':'level measured';
-  document.getElementById('baseline-progress').textContent=((d.progressFromBaseline||0)>=0?'+':'')+(d.progressFromBaseline||0).toFixed(1)+'%';
+  var baselineProgress=Number(d.progressFromBaseline)||0;
+  document.getElementById('baseline-progress').textContent=(baselineProgress>=0?'+':'')+baselineProgress.toFixed(3)+'%';
   document.getElementById('last-assessment').textContent=d.lastAssessment||'Not assessed';
 
   var today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   var daily=d.dailyPractice||{};
   var pct=daily.date===today?Math.max(0,Math.min(100,Number(daily.percent)||0)):0;
   var exactPct=Math.round(pct);
-  var bucket=exactPct===100?100:Math.floor(exactPct/25)*25;
+  var bucket=Math.max(0,Math.min(100,Math.round(exactPct/25)*25));
+  var isCharging=daily.date===today&&daily.isCharging===true;
   var labels={0:'No practice today',25:'Building momentum',50:'Developing',75:'Strong practice',100:'Daily peak'};
   var stages=Array.prototype.slice.call(document.querySelectorAll('.practice-stage'));
   stages.forEach(function(stage){
     var raw=stage.getAttribute('data-step');
     if(raw==='charging'){
-      stage.classList.toggle('current',exactPct>0&&exactPct<100);
+      stage.classList.toggle('reached',false);
+      stage.classList.toggle('current',isCharging);
       return;
     }
     var step=Number(raw);
-    stage.classList.toggle('reached',step<=bucket);
-    stage.classList.toggle('current',step===bucket);
+    stage.classList.toggle('reached',!isCharging&&step<bucket);
+    stage.classList.toggle('current',!isCharging&&step===bucket);
   });
   document.getElementById('daily-summary-value').textContent=exactPct+'%';
   document.getElementById('daily-summary-label').textContent=daily.date===today&&daily.label?daily.label:labels[bucket];
