@@ -3,7 +3,7 @@ window.englishProgress = {
   baselineUnits: 600000,
   currentLevel: 59.995,
   progressFromBaseline: -0.005,
-  lastAssessment: "2026-09-13 · Solid B2 baseline",
+  lastAssessment: "2026-09-15 · Spontaneous professional conversation",
   history: [
     { date: "2026-09-13", units: 600000, level: 60, label: "Solid B2 baseline" },
     { date: "2026-09-13", units: 600050, level: 60.005, label: "Professional variance explanation" },

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0A0D0B;--panel:#101512;--panel2:#0D1210;--line:#223028;--ink:#DCE5DE;--soft:#7C8B82;--dim:#4E5A53;--accent:#2FE18C;--amber:#E0A54B}
+:root{--bg:#0A0D0B;--panel:#101512;--panel2:#0D1210;--line:#223028;--ink:#DCE5DE;--soft:#7C8B82;--dim:#4E5A53;--accent:#5AA9E6;--amber:#E0A54B}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Mono',monospace;line-height:1.6}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:repeating-linear-gradient(0deg,var(--accent) 0 1px,transparent 1px 40px),repeating-linear-gradient(90deg,var(--accent) 0 1px,transparent 1px 40px)}
@@ -59,7 +59,7 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
 .stage-battery:before{content:"";position:absolute;top:-8px;left:16px;width:18px;height:6px;border:2px solid currentColor;border-bottom:0;border-radius:4px 4px 0 0}
 .stage-battery:after{content:"";position:absolute;inset:5px;background:transparent;border-radius:3px;z-index:-1}
 .segment{height:11px;border-radius:2px;background:var(--line)}
-.practice-stage.current .segment.filled{background:var(--accent);box-shadow:0 0 8px rgba(47,225,140,.28)}
+.practice-stage.current .segment.filled{background:var(--accent);box-shadow:0 0 8px rgba(90,169,230,.28)}
 .practice-stage[data-step="0"].current{color:#E0645C}.practice-stage[data-step="25"].current{color:var(--amber)}
 .practice-stage[data-step="50"].current,.practice-stage[data-step="75"].current{color:#D9D94A}
 .practice-stage[data-step="100"].current,.practice-stage[data-step="charging"].current{color:var(--accent)}
@@ -126,7 +126,15 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--dim);font-siz
   document.getElementById('level-status').textContent=level===null?'calibration pending':'level measured';
   var baselineProgress=Number(d.progressFromBaseline)||0;
   document.getElementById('baseline-progress').textContent=(baselineProgress>=0?'+':'')+baselineProgress.toFixed(3)+'%';
-  document.getElementById('last-assessment').textContent=d.lastAssessment||'Not assessed';
+
+  // LAST STANDARDIZED CHECK: se calcula solo a partir de la última entrada
+  // de history (por fecha), en vez de depender de un texto fijo. Así no
+  // hay que tocar nada acá cada vez que se agrega una práctica nueva.
+  var history=Array.isArray(d.history)?d.history.slice():[];
+  history.sort(function(a,b){ return (a.date||'').localeCompare(b.date||''); });
+  var latest=history.length?history[history.length-1]:null;
+  var lastAssessmentText=latest?(latest.date+' · '+latest.label):(d.lastAssessment||'Not assessed');
+  document.getElementById('last-assessment').textContent=lastAssessmentText;
 
   var today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   var daily=d.dailyPractice||{};
