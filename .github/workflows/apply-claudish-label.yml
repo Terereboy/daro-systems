@@ -1,0 +1,34 @@
+name: Apply Claudish label
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'english-progress-data.js'
+  pull_request:
+    paths:
+      - 'english-progress-data.js'
+
+permissions:
+  contents: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Apply Claudish label if needed
+        run: node scripts/apply-claudish-label.js
+
+      - name: Commit changes if any
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-apply Claudish label"
+          file_pattern: english-progress-data.js
