@@ -3,7 +3,7 @@ window.englishProgress = {
   "baselineUnits": 600000,
   "currentLevel": 60.002,
   "progressFromBaseline": 0.002,
-  "lastAssessment": "2026-09-20 · Reflection and action planning",
+  "lastAssessment": "2026-09-29 · Natural interview speaking (partial)",
   "history": [
     {
       "date": "2026-09-13",
@@ -46,14 +46,20 @@ window.englishProgress = {
       "units": 600020,
       "level": 60.002,
       "label": "Reflection and action planning"
+    },
+    {
+      "date": "2026-09-29",
+      "units": 600020,
+      "level": 60.002,
+      "label": "Natural interview speaking — partial; mastery unchanged"
     }
   ],
   "dailyPractice": {
-    "date": "2026-09-20",
-    "percent": 72,
-    "label": "Clear reflection with guided self-correction",
+    "date": "2026-09-29",
+    "percent": 70,
+    "label": "Partial practice: natural interview introductions (estimated score)",
     "scoredBlocks": 1,
-    "generalDelta": -40,
-    "lastSessionScore": 72
+    "generalDelta": 0,
+    "lastSessionScore": 70
   }
 };
