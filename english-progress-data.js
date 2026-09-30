@@ -1,9 +1,9 @@
 window.englishProgress = {
-  "masteryUnits": 600020,
+  "masteryUnits": 600080,
   "baselineUnits": 600000,
-  "currentLevel": 60.002,
-  "progressFromBaseline": 0.002,
-  "lastAssessment": "2026-09-29 · Natural interview speaking (partial)",
+  "currentLevel": 60.008,
+  "progressFromBaseline": 0.008,
+  "lastAssessment": "2026-09-29 · Interview motivation and AI process improvement",
   "history": [
     {
       "date": "2026-09-13",
@@ -52,14 +52,20 @@ window.englishProgress = {
       "units": 600020,
       "level": 60.002,
       "label": "Natural interview speaking — partial; mastery unchanged"
+    },
+    {
+      "date": "2026-09-29",
+      "units": 600080,
+      "level": 60.008,
+      "label": "Interview motivation and AI process improvement"
     }
   ],
   "dailyPractice": {
     "date": "2026-09-29",
-    "percent": 70,
-    "label": "Partial practice: natural interview introductions (estimated score)",
-    "scoredBlocks": 1,
-    "generalDelta": 0,
-    "lastSessionScore": 70
+    "percent": 73.6,
+    "label": "Natural interview answers and measurable business impact",
+    "scoredBlocks": 2,
+    "generalDelta": 60,
+    "lastSessionScore": 76
   }
 };
