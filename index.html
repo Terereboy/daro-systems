@@ -208,26 +208,28 @@
   }
   .panel-body{ padding: 20px 20px 16px; }
   .panel-body svg{ width: 100%; height: auto; display: block; }
-  .signal-caption{
-    font-size: 11.5px;
-    color: var(--ink-soft);
-    margin-top: 12px;
-    display: flex;
-    gap: 22px;
+  /* ---------- esfera de ideas (reemplaza el chart de regime) ---------- */
+  .ds-stage{ position: relative; width: 100%; height: clamp(320px, 52vw, 440px); background: var(--bg-panel); }
+  .ds-stage canvas{ position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: manipulation; }
+  .ds-hint{ position: absolute; left: 0; right: 0; top: 14px; text-align: center; font-size: 11.5px; color: var(--ink-dim); pointer-events: none; transition: opacity .6s; }
+  .ds-hint::before{ content: "$ "; }
+  .ds-card{
+    position: absolute; left: 50%; bottom: 14px; width: min(92%, 500px); padding: 12px 16px 16px;
+    background: rgba(13,18,16,.88); border: 1px solid var(--accent-dim); border-radius: 6px;
+    box-shadow: 0 0 22px rgba(90,169,230,.22), 0 0 44px rgba(150,112,230,.18);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    opacity: 0; transform: translate(-50%, 22px) scale(.95); pointer-events: none; overflow: hidden; text-align: left;
   }
-  .signal-caption .sw{
-    display: inline-block; width: 8px; height: 8px; margin-right: 6px; vertical-align: middle;
-  }
-
-  .path-slow{ stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 2.2s ease forwards .2s; }
-  .path-fast{ stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 2.2s ease forwards .5s; }
-  .cross-dot{ opacity: 0; animation: pop .4s ease forwards 2.2s; }
-  @keyframes draw{ to{ stroke-dashoffset: 0; } }
-  @keyframes pop{ to{ opacity: 1; } }
-  @media (prefers-reduced-motion: reduce){
-    .path-slow, .path-fast{ stroke-dashoffset: 0; animation: none; }
-    .cross-dot{ opacity: 1; animation: none; }
-  }
+  .ds-card.ds-show{ animation: ds-in .5s cubic-bezier(.2,.9,.25,1) forwards; }
+  .ds-card.ds-hide{ animation: ds-out .4s ease forwards; }
+  @keyframes ds-in{ from{ opacity: 0; transform: translate(-50%, 22px) scale(.93); filter: blur(5px); } to{ opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); } }
+  @keyframes ds-out{ to{ opacity: 0; transform: translate(-50%, -10px) scale(.97); filter: blur(4px); } }
+  .ds-n{ font-size: 11px; color: var(--accent); margin-bottom: 5px; }
+  .ds-t{ font-size: clamp(13px, 3.4vw, 15px); line-height: 1.45; color: var(--ink); }
+  .ds-bar{ position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: linear-gradient(90deg, var(--accent), #9670E6); transform-origin: left; transform: scaleX(0); }
+  .ds-card.ds-show .ds-bar{ animation: ds-drain 6s linear forwards; }
+  @keyframes ds-drain{ from{ transform: scaleX(1); } to{ transform: scaleX(0); } }
+  @media (prefers-reduced-motion: reduce){ .ds-card.ds-show, .ds-card.ds-hide{ animation-duration: .01s; } }
 
   .section-label{
     font-size: 12.5px;
@@ -644,21 +646,12 @@
         <span class="dot-btn" style="background:var(--red)"></span>
         <span class="dot-btn" style="background:var(--amber)"></span>
         <span class="dot-btn" style="background:var(--accent)"></span>
-        <span class="panel-title">acmm_strategy.py — regime: 4H/1D</span>
+        <span class="panel-title">Daro's projects &amp; Ideas</span>
       </div>
-      <div class="panel-body">
-        <svg viewBox="0 0 860 160" preserveAspectRatio="none">
-          <line x1="0" y1="140" x2="860" y2="140" stroke="var(--line)" stroke-width="1"/>
-          <path class="path-slow" d="M0,110 C120,105 180,90 260,95 C340,100 380,120 460,115 C540,110 580,75 660,70 C740,65 800,72 860,60"
-                fill="none" stroke="var(--ink-dim)" stroke-width="2"/>
-          <path class="path-fast" d="M0,125 C100,122 160,118 230,112 C310,105 360,100 430,88 C500,76 560,68 630,66 C700,64 780,58 860,45"
-                fill="none" stroke="var(--accent)" stroke-width="2.25"/>
-          <circle class="cross-dot" cx="470" cy="97" r="5" fill="var(--accent)"/>
-        </svg>
-        <div class="signal-caption">
-          <span><span class="sw" style="background:var(--ink-dim)"></span>EMA 200D</span>
-          <span><span class="sw" style="background:var(--accent)"></span>EMA 20/50 4H</span>
-        </div>
+      <div class="ds-stage" id="dsStage">
+        <canvas id="dsCanvas" aria-label="Esfera 3D de partículas. Tocá para ver un proyecto o una idea"></canvas>
+        <div class="ds-hint" id="dsHint">click</div>
+        <div class="ds-card" id="dsCard" role="status" aria-live="polite"><div class="ds-n" id="dsN"></div><div class="ds-t" id="dsT"></div><div class="ds-bar"></div></div>
       </div>
     </div>
   </div>
@@ -1164,5 +1157,177 @@
   if(evolution){var p=Number(d.progressFromBaseline)||0;evolution.textContent=(p>=0?'+':'')+p.toFixed(3)+'%';}
 })();
 </script>
+<script>
+/* Esfera de ideas — reemplaza el chart de regime. Usa window.appLang (ES/EN) del toggle del sitio. */
+(function(){
+  var IDEAS = {
+    es: [
+      "18+ años en Finanzas y Control de Gestión",
+      "80–90% menos esfuerzo manual con casos de uso de IA",
+      "10+ años operando mercados argentinos a mano",
+      "Motor de backtesting propio con numpy",
+      "Detección de régimen: EMA 200D + EMA 20/50 en 4H",
+      "Funding rate arbitrage sobre perpetuos",
+      "Mean-reversion con Z-score",
+      "Agente de IA que rutea y clasifica emails de cobranzas",
+      "Forecast de cobros con Python: detecta errores y cuantifica riesgo",
+      "Scoring de riesgo y aging de cobranzas en Power BI",
+      "142 personas capacitadas en 6 sesiones globales de infosec",
+      "150 colaboradores en programas globales",
+      "4 analistas liderados en IBERIA",
+      "Cyber Lab: Docker + red aislada + máquinas vulnerables a propósito",
+      "Wazuh centraliza los logs de cada ataque simulado",
+      "Cyber Range: Start / Stop / Reset de escenarios con un click",
+      "Scoring para medir qué tan bien detecta y responde el equipo azul",
+      "Escenarios en YAML mapeados a MITRE ATT&CK",
+      "Red / Threat Simulator vs. Blue / SOC Defense",
+      "Orquestador en Python + FastAPI que ejecuta cada escenario",
+      "Dashboard para elegir un escenario y darle Run",
+      "Roadmap: Cyber Lab → Cyber Range → Cyber Operations Simulator",
+      "Un laboratorio aislado para practicar ciberseguridad sin riesgo"
+    ],
+    en: [
+      "18+ years in Finance and Management Control",
+      "80–90% less manual effort with AI use cases",
+      "10+ years trading Argentine markets manually",
+      "In-house backtesting engine built with numpy",
+      "Regime detection: EMA 200D + EMA 20/50 on 4H",
+      "Funding rate arbitrage on perpetuals",
+      "Mean-reversion with Z-score",
+      "AI agent that routes and classifies collections emails",
+      "Collections forecast in Python: flags errors and quantifies risk",
+      "Risk scoring and collections aging in Power BI",
+      "142 people trained across 6 global infosec sessions",
+      "150 collaborators in global programs",
+      "4 analysts led in IBERIA",
+      "Cyber Lab: Docker + isolated network + deliberately vulnerable machines",
+      "Wazuh centralizes the logs of every simulated attack",
+      "Cyber Range: Start / Stop / Reset scenarios in one click",
+      "Scoring to measure how well the blue team detects and responds",
+      "YAML scenarios mapped to MITRE ATT&CK",
+      "Red / Threat Simulator vs. Blue / SOC Defense",
+      "Python + FastAPI orchestrator that runs each scenario",
+      "Dashboard to pick a scenario and hit Run",
+      "Roadmap: Cyber Lab → Cyber Range → Cyber Operations Simulator",
+      "An isolated lab to practice cybersecurity risk-free"
+    ]
+  };
+  var A = [90,169,230], B = [150,112,230];   // azul del sitio y violeta
+
+  var stage = document.getElementById('dsStage');
+  var canvas = document.getElementById('dsCanvas');
+  if(!stage || !canvas) return;
+  var ctx = canvas.getContext('2d');
+  var card = document.getElementById('dsCard'), tEl = document.getElementById('dsT'),
+      nEl = document.getElementById('dsN'), hint = document.getElementById('dsHint');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var W = 0, H = 0, cx = 0, cy = 0, R = 0;
+  function resize(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = stage.clientWidth; H = stage.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cx = W / 2; cy = H * 0.38; R = Math.min(W * 0.4, H * 0.29);
+  }
+  if(window.ResizeObserver) new ResizeObserver(resize).observe(stage); else window.addEventListener('resize', resize);
+  resize();
+
+  var N = 340, pts = [], links = [], i, j;
+  for(i = 0; i < N; i++){
+    var y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), a = i * Math.PI * (3 - Math.sqrt(5));
+    pts.push({ x: Math.cos(a) * r, y: y, z: Math.sin(a) * r, ph: Math.random() * 6.28 });
+  }
+  for(i = 0; i < N; i++) for(j = i + 1; j < N; j++){
+    var dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y, dz = pts[i].z - pts[j].z;
+    if(dx*dx + dy*dy + dz*dz < 0.095) links.push([i, j]);
+  }
+  function col(m, al){ // m: 0 → violeta, 1 → azul
+    return 'rgba(' + Math.round(B[0] + (A[0]-B[0])*m) + ',' + Math.round(B[1] + (A[1]-B[1])*m) + ',' + Math.round(B[2] + (A[2]-B[2])*m) + ',' + al + ')';
+  }
+
+  var rotY = 0, pulse = 0, visible = true, t0 = performance.now(), proj = new Array(N);
+  function frame(now){
+    requestAnimationFrame(frame);
+    if(!visible || !W) return;
+    var t = (now - t0) / 1000;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, W, H);
+    rotY += reduce ? 0.0015 : 0.004 + pulse * 0.02;
+    var rotX = 0.35 + Math.sin(t * 0.3) * 0.08;
+    var cY = Math.cos(rotY), sY = Math.sin(rotY), cX = Math.cos(rotX), sX = Math.sin(rotX);
+    var rad = R * (1 + Math.sin(t * 1.4) * 0.015 + pulse * 0.09);
+
+    var g = ctx.createRadialGradient(cx, cy, rad * 0.2, cx, cy, rad * 1.8);
+    g.addColorStop(0, 'rgba(150,112,230,' + (0.14 + pulse * 0.35) + ')');
+    g.addColorStop(0.5, 'rgba(90,169,230,' + (0.05 + pulse * 0.15) + ')');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    var k;
+    for(k = 0; k < N; k++){
+      var p = pts[k];
+      var x = p.x * cY + p.z * sY, z = -p.x * sY + p.z * cY;
+      var y2 = p.y * cX - z * sX, z2 = p.y * sX + z * cX, s = 1 / (1 - z2 * 0.35);
+      proj[k] = { x: cx + x * rad * s, y: cy + y2 * rad * s, z: z2, s: s };
+    }
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineWidth = 1;
+    for(var l = 0; l < links.length; l++){
+      var p1 = proj[links[l][0]], p2 = proj[links[l][1]];
+      var al = (0.05 + ((p1.z + p2.z) / 2 + 1) * 0.09) * (1 + pulse * 2.5);
+      ctx.strokeStyle = col((pts[links[l][0]].y + 1) / 2, al);
+      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+    }
+    for(k = 0; k < N; k++){
+      var q = proj[k], m = (pts[k].y + 1) / 2;
+      var tw = 0.7 + 0.3 * Math.sin(t * 2 + pts[k].ph);
+      var size = (1.1 + (q.z + 1) * 0.9) * q.s * (1 + pulse * 0.8);
+      var op = Math.min(1, (0.35 + (q.z + 1) * 0.35) * tw + pulse * 0.4);
+      ctx.fillStyle = col(m, op * 0.25); ctx.beginPath(); ctx.arc(q.x, q.y, size * 3, 0, 6.283); ctx.fill();
+      ctx.fillStyle = col(m, op);        ctx.beginPath(); ctx.arc(q.x, q.y, size, 0, 6.283); ctx.fill();
+    }
+    pulse *= 0.93; if(pulse < 0.003) pulse = 0;
+  }
+  requestAnimationFrame(frame);
+  if(window.IntersectionObserver) new IntersectionObserver(function(e){ visible = e[0].isIntersecting; }).observe(stage);
+
+  // Sin repetir hasta agotar la lista; el ciclo nuevo no arranca con la última.
+  // ES y EN tienen el mismo orden, así que el idioma puede cambiar en medio del ciclo.
+  var queue = [], last = -1, count = 0, hideT, cleanT;
+  function refill(){
+    queue = IDEAS.es.map(function(_, i){ return i; });
+    for(var i = queue.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), tmp = queue[i]; queue[i] = queue[j]; queue[j] = tmp; }
+    if(queue.length > 1 && queue[queue.length - 1] === last){
+      var k = Math.floor(Math.random() * (queue.length - 1)), tmp2 = queue[queue.length - 1];
+      queue[queue.length - 1] = queue[k]; queue[k] = tmp2;
+    }
+  }
+  function show(){
+    clearTimeout(hideT); clearTimeout(cleanT);
+    card.classList.remove('ds-show', 'ds-hide'); void card.offsetWidth;
+    if(!queue.length) refill();
+    last = queue.pop(); count++;
+    var lang = window.appLang === 'en' ? 'en' : 'es';
+    nEl.textContent = '$ ' + (lang === 'en' ? 'item ' : 'dato ') + count;
+    tEl.textContent = IDEAS[lang][last];
+    card.classList.add('ds-show');
+    hideT = setTimeout(function(){
+      card.classList.remove('ds-show'); card.classList.add('ds-hide');
+      cleanT = setTimeout(function(){ card.classList.remove('ds-hide'); }, 420);
+    }, 6000);
+  }
+  function hit(e){
+    var b = canvas.getBoundingClientRect();
+    return Math.hypot(e.clientX - b.left - cx, e.clientY - b.top - cy) <= R * 1.12;
+  }
+  canvas.addEventListener('pointermove', function(e){ canvas.style.cursor = hit(e) ? 'pointer' : 'default'; });
+  canvas.addEventListener('pointerdown', function(e){
+    if(!hit(e)) return;
+    pulse = 1; hint.style.opacity = 0; show();
+  });
+})();
+</script>
+
 </body>
 </html>
