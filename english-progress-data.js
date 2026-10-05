@@ -1,9 +1,9 @@
 window.englishProgress = {
-  "masteryUnits": 600060,
+  "masteryUnits": 600040,
   "baselineUnits": 600000,
-  "currentLevel": 60.006,
-  "progressFromBaseline": 0.006,
-  "lastAssessment": "2026-10-01 · Cybersecurity incident communication",
+  "currentLevel": 60.004,
+  "progressFromBaseline": 0.004,
+  "lastAssessment": "2026-10-05 · Everyday life comprehension (partial)",
   "history": [
     {
       "date": "2026-09-13",
@@ -64,14 +64,20 @@ window.englishProgress = {
       "units": 600060,
       "level": 60.006,
       "label": "Cybersecurity incident communication"
+    },
+    {
+      "date": "2026-10-05",
+      "units": 600040,
+      "level": 60.004,
+      "label": "Everyday life comprehension — partial"
     }
   ],
   "dailyPractice": {
-    "date": "2026-10-01",
-    "percent": 74,
-    "label": "Cybersecurity comprehension and incident update (provisional)",
+    "date": "2026-10-05",
+    "percent": 72,
+    "label": "Everyday life comprehension (partial, provisional)",
     "scoredBlocks": 1,
     "generalDelta": -20,
-    "lastSessionScore": 74
+    "lastSessionScore": 72
   }
 };
